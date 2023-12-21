@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
+class UMonsterFSM;
+
 UCLASS()
 class THELASTARCHER_API AMonsterBase : public ACharacter
 {
@@ -23,7 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+public:
+UPROPERTY(EditAnywhere)
+	UMonsterFSM* MonsterFsm;
+	
 };
