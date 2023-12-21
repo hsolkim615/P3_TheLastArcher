@@ -5,14 +5,14 @@
 
 #include "AsyncTreeDifferences.h"
 #include "MonsterBase.h"
+#include "Player_Archer.h"
 #include "GameFramework/Character.h"
 
-// Sets default values for this component's properties
+
 UMonsterFSM::UMonsterFSM()
 {
 
 	PrimaryComponentTick.bCanEverTick = true;
-	
 	
 }
 
@@ -22,6 +22,7 @@ void UMonsterFSM::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 나의 주인이 누군지 알거라.
 	Self = Cast<AMonsterBase>(GetOwner());
 	
 }
@@ -46,7 +47,7 @@ void UMonsterFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 void UMonsterFSM::TickIdle()
 {
 	// 플레이어를 찾고 싶다, 목적지를 플레이어로 기억하고싶다.
-	Target = Cast<ACharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	Target = Cast<APlayer_Archer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	// 만약 찾았다면 (조건)
 	if(Target != nullptr)
 	{
@@ -59,17 +60,23 @@ void UMonsterFSM::TickIdle()
 
 void UMonsterFSM::TickMove()
 {
+	UE_LOG(LogTemp,Warning,TEXT("Move!"))
 	// 목적지를 향해 이동하고싶다.
 	FVector Direction = Target->GetActorLocation() - Self->GetActorLocation();
-	Self->AddMovementInput(Direction);
+	
+	Self->AddMovementInput(Direction.GetSafeNormal());
 	// 공격 가능 거리라면
+	if(Direction.Length() <= AttackRange)
+	{
+		State = EMonsterState::Attack;
+	}
 	
 	// 공격 상태로 전이하고싶다.
 }
 
 void UMonsterFSM::TickAttack()
 {
-	 
+	 UE_LOG(LogTemp,Warning,TEXT("Attack!"));
 }
 
 void UMonsterFSM::TickDamage()

@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "MonsterFSM.generated.h"
 
+class APlayer_Archer;
 class AMonsterBase;
 
 UENUM(BlueprintType)
@@ -42,9 +43,10 @@ public:
 	UPROPERTY()
 	AMonsterBase* Self;
 	UPROPERTY()
-	ACharacter* Target;
+	APlayer_Archer* Target;
 
-	FVector PlayerLocation;
+	// 공격 가능거리
+	float AttackRange = 300;
 	
 
 private:
