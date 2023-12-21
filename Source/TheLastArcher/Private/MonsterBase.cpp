@@ -3,6 +3,7 @@
 
 #include "MonsterBase.h"
 #include "AI/MonsterFSM.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
 AMonsterBase::AMonsterBase()
