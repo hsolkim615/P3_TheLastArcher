@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include <../../../../../../../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputActionValue.h>
 #include "Player_Archer.generated.h"
 
 UCLASS()
@@ -52,8 +53,16 @@ public:
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MySettings|Components")
-	class UInputMappingContext* imc;
+	class UInputMappingContext* InputMappingContext;
 
 
+public:
+	// 오른손 입력
+	void RightThumbStick(const FInputActionValue& value); // 플레이어 움직임
+
+	// 왼손 입력
+	void LeftThumbStick(const FInputActionValue& value); // 플레이어 시야 각도
+
+	
 
 };
