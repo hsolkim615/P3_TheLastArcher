@@ -6,7 +6,7 @@
 #include "AsyncTreeDifferences.h"
 #include "MonsterBase.h"
 #include "Player_Archer.h"
-#include "GameFramework/Character.h"
+
 
 
 UMonsterFSM::UMonsterFSM()
@@ -49,7 +49,7 @@ void UMonsterFSM::TickIdle()
 	// 플레이어를 찾고 싶다, 목적지를 플레이어로 기억하고싶다.
 	Target = Cast<APlayer_Archer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	// 만약 찾았다면 (조건)
-	if(Target != nullptr)
+	if(Target != nullptr && IdleState)
 	{
 		// 이동 상태로 전이하고싶다.
 		State = EMonsterState::Move; // 전이
@@ -81,6 +81,7 @@ void UMonsterFSM::TickAttack()
 
 void UMonsterFSM::TickDamage()
 {
+	
 }
 
 void UMonsterFSM::TickDie()

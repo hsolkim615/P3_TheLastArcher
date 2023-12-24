@@ -44,6 +44,8 @@ public:
 	AMonsterBase* Self;
 	UPROPERTY()
 	APlayer_Archer* Target;
+	UPROPERTY()
+	float IdleState;
 
 	// 공격 가능거리
 	float AttackRange = 300;
