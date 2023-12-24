@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Bow_Archer.generated.h"
+#include "PlayerBow.generated.h"
 
 UCLASS()
-class THELASTARCHER_API ABow_Archer : public AActor
+class THELASTARCHER_API APlayerBow : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABow_Archer();
+	APlayerBow();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,5 +22,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	UPROPERTY(EditAnywhere)
+	class USkeletalMeshComponent* BowSkeletalMesh;
+
+	// 화살 종류 3개 - 일반 화살, 텔레포트 화살, 불화살
 
 };
