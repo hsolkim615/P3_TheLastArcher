@@ -3,14 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Player_Archer.h"
 #include "Components/ActorComponent.h"
+#include "Framework/Docking/STabDrawer.h"
 #include "MonsterFSM.generated.h"
 
+
+class UMonsterAnim;
+class UNormalMonsterAnimInstance;
 class APlayer_Archer;
 class AMonsterBase;
 
 UENUM(BlueprintType)
-enum class EMonsterState
+enum class EMonsterState : uint8
 {
 	Idle,
 	Move,
@@ -42,19 +47,46 @@ public:
 	// FSM Owner 설정
 	UPROPERTY()
 	AMonsterBase* Self;
+
 	UPROPERTY()
 	APlayer_Archer* Target;
-	UPROPERTY()
-	float IdleState;
 
 	// 공격 가능거리
 	float AttackRange = 300;
+
+	float CurrentTime;
+	// 경직
+	UPROPERTY(EditAnywhere)
+	float DamageTime = 2;
+	UPROPERTY(EditAnywhere)
+	float Dietime = 2;
+	// 공격 쿨타임
+	UPROPERTY(EditAnywhere)
+	float AttackTime = 2;
 	
+	
+public:
+	void SetState(EMonsterState Next);
 
 private:
+	
 	void TickIdle();
 	void TickMove();
 	void TickAttack();
 	void TickDamage();
 	void TickDie();
+
+public:
+	UPROPERTY()
+	UMonsterAnim* MonsterAnim;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* MonsterMontage;
+
+	// 맞는 애니메이션
+	void PlayMontageHitted();
+	// 죽는 애니메이션
+	void PlayMontageDie();
+	
+	
 };
