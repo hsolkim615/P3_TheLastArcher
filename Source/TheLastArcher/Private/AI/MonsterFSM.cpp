@@ -98,8 +98,9 @@ void UMonsterFSM::TickAttack()
 		// 공격 애니메이션을 키고
 		MonsterAnim->IsAttack = true;
 		CurrentTime = 0;
+		float Dist = FVector::Dist(Target->GetActorLocation(), Self->GetActorLocation());
 		// 공격범위를 벗어나면
-		if(AttackRange > Target->GetActorLocation().Length())
+		if(Dist > AttackRange)
 		{
 			// 타겟을 쫓고 쫓을 때는 공격하지 않도록 할것이다.
 			SetState(EMonsterState::Move);
@@ -121,7 +122,7 @@ void UMonsterFSM::TickDamage()
 	if(CurrentTime > DamageTime)
 	{
 		// 맞는 애니메이션을 하고
-		PlayMontageHitted();
+		PlayMontageHit();
 		UE_LOG(LogTemp,Warning,TEXT("Hitted!"));
 		// 이동상태로 전이 하고싶다.
 		SetState(EMonsterState::Move);
@@ -143,7 +144,7 @@ void UMonsterFSM::TickDie()
 	
 }
 
-void UMonsterFSM::PlayMontageHitted()
+void UMonsterFSM::PlayMontageHit()
 {
 	Self->PlayAnimMontage(MonsterMontage,1,TEXT("Hitted"));
 }

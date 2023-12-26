@@ -84,7 +84,7 @@ public:
 	UAnimMontage* MonsterMontage;
 
 	// 맞는 애니메이션
-	void PlayMontageHitted();
+	void PlayMontageHit();
 	// 죽는 애니메이션
 	void PlayMontageDie();
 	
