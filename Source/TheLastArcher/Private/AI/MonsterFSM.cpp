@@ -123,7 +123,7 @@ void UMonsterFSM::TickDamage()
 	{
 		// 맞는 애니메이션을 하고
 		PlayMontageHit();
-		UE_LOG(LogTemp,Warning,TEXT("Hitted!"));
+		UE_LOG(LogTemp,Warning,TEXT("Hit!"));
 		// 이동상태로 전이 하고싶다.
 		SetState(EMonsterState::Move);
 	}
@@ -133,7 +133,7 @@ void UMonsterFSM::TickDamage()
 void UMonsterFSM::TickDie()
 {
 	PlayMontageDie();
-	UE_LOG(LogTemp,Warning,TEXT("Hitted!"));
+	UE_LOG(LogTemp,Warning,TEXT("Hit!"));
 	CurrentTime += GetWorld()->GetDeltaSeconds();
 	if(CurrentTime>Dietime)
 	{

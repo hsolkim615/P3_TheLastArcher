@@ -52,7 +52,7 @@ public:
 	APlayer_Archer* Target;
 
 	// 공격 가능거리
-	float AttackRange = 300;
+	float AttackRange = 200;
 
 	float CurrentTime;
 	// 경직
