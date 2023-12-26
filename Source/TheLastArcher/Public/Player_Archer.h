@@ -7,6 +7,17 @@
 #include "InputActionValue.h"
 #include "Player_Archer.generated.h"
 
+/* ***************
+UENUM(BlueprintType)
+enum class EArrowType : uint8 
+{
+	NormalArrow,
+	TeleportArrow,
+	FireArrow,
+	ReturnFNormal
+};
+*/
+
 UCLASS()
 class THELASTARCHER_API APlayer_Archer : public ACharacter
 {
@@ -86,7 +97,35 @@ public: // BindKey
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|BindKey")
 	class UInputAction* IA_LeftGrip;
 
+public:
+	// 언리얼에서 스폰할 화살 - 추후 수정 필요 ================
+	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
+	TSubclassOf<class AArrow_Base> Factory_NomalArrow;
 
+	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
+	TSubclassOf<class AArrow_Base> Factory_TeleportArrow;
+	
+	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
+	TSubclassOf<class AArrow_Base> Factory_FireArrow;
+	// 언리얼에서 스폰할 화살 - 추후 수정 필요 ================
+
+	// 화살 스폰될 위치 
+	FTransform ArrowSpawnPlace;
+	
+	/* ****************
+	EArrowType CurrentArrowType;
+	*/
+
+
+
+	bool Choose_Normal = false;
+	bool Choose_Teleport = false;
+	bool Choose_Fire = false;
+
+	bool GetItemFire = false;
+
+
+	
 
 
 private: // Bind Function
@@ -94,6 +133,22 @@ private: // Bind Function
 
 	// 플레이어의 이동 방향
 	FVector PlayerDirection;
+
+	// 장전된 화살 변수
+	bool bIsLoadArrow = false;
+
+	// 장전 중인 Arrow
+	class AArrow_Base* LoadArrow;
+
+	// 앞으로 나가는 화살
+	class AArrow_Base* GoArrow;
+
+	FVector NewArrowPosition;
+
+	// 공격 준비 상태로 bool변수 false로 전환
+	float ArrowSpeed = 1000.0f; // 화살의 이동 속도
+	FVector ArrowDirection = FVector(1.0f, 0.0f, 0.0f); // X축 방향으로 이동하는 것으로 가정
+
 
 
 
@@ -104,21 +159,31 @@ private: // Bind Function
 	// 오른손 입력
 	void RightThumbStick_Turn(const FInputActionValue& value); // 플레이어 움직임
 
-	void RightThumbStick_Attack_Ready(const FInputActionValue& value); // 플레이어 공격 - 화살 잡기 
-	void RightThumbStick_Attack_Shot(const FInputActionValue& value); // 플레이어 공격 - 화살 놓기
+	void RightTrigger_Attack_Ready(const FInputActionValue& value); // 플레이어 공격 - 화살 잡기 
+	void RightTrigger_Attack_Shot(const FInputActionValue& value); // 플레이어 공격 - 화살 놓기
 
 
 	// 왼손 입력
 	void LeftThumbStick_Move(const FInputActionValue& value); // 플레이어 시야 각도
 
-	void LeftTrigger_ReadyArrow(const FInputActionValue& value); // 플레이어 화살 장전
+	void LeftTrigger_LoadArrow(const FInputActionValue& value); // 플레이어 화살 장전
+
+	void LeftGrip_ChangeArrowType(const FInputActionValue& value); // 플레이어 화살 종류 전환
 
 
 
 
+public: // 화살 스폰 함수
+	void Spawn_NormalArrowFunc();
+
+	void Spawn_TeleportArrowFunc();
+
+	void Spawn_FireArrowFunc();
 
 
 
+
+public:
 
 	//===============
 	// 플레이어 체력 -> 활에 UI

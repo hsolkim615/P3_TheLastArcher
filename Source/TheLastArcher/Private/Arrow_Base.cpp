@@ -6,8 +6,21 @@
 // Sets default values
 AArrow_Base::AArrow_Base()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	ArrowMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ArrowMeshComp"));
+	ArrowMeshComp->SetRelativeScale3D(FVector(2));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>ArrowMesh(TEXT("/Script/Engine.StaticMesh'/Game/Resource/Arrow/WoodenArrow.WoodenArrow'"));
+
+	if (ArrowMesh.Succeeded()) {
+		ArrowMeshComp->SetStaticMesh(ArrowMesh.Object);
+
+	}
+
+
+
 
 }
 
@@ -15,7 +28,7 @@ AArrow_Base::AArrow_Base()
 void AArrow_Base::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
