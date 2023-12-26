@@ -290,9 +290,13 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 	//BowStringPlace->AttachToComponent(RightHand);
 
+
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
+	BowStringPlace->AttachToComponent(RightHand, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
+
+
+
 	// 공격 준비 상태로 bool변수 true로 전환
-
-
 
 }
 
@@ -300,6 +304,8 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Trigger_Shot"));
 
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
+	BowStringPlace->AttachToComponent(BowMeshComp, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
 
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
 
@@ -311,13 +317,6 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 
 		LoadArrow = nullptr;
 	}
-
-
-
-
-
-
-
 
 
 
