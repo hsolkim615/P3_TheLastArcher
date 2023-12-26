@@ -8,7 +8,7 @@ public class TheLastArcher : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "HeadMountedDisplay", "XRBase" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "HeadMountedDisplay", "XRBase", "CableComponent" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

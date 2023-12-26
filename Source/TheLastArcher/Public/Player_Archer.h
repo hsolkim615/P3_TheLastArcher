@@ -71,6 +71,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class USkeletalMeshComponent* BowMeshComp;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components") 
+	class UStaticMeshComponent* BowStringPlace;	
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components") 
+	class UCableComponent* UpBowString;
+	//TObjectPtr<class UCableComponent> UPBowString;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
+	class UCableComponent* DownBowString;
+	//TObjectPtr<class UCableComponent> DownBowString;
+
 	// »ý¼ºÀÚ ==============
 
 

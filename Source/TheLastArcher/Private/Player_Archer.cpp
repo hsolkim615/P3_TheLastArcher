@@ -12,6 +12,8 @@
 #include "Arrow_Type/Arrow_Normal.h"
 #include "Arrow_Type/Arrow_Teleport.h"
 #include "Arrow_Type/Arrow_Fire.h"
+#include "CableComponent.h"
+#include <../../../../../../../Source/Runtime/Engine/Classes/Components/StaticMeshComponent.h>
 
 // Sets default values
 APlayer_Archer::APlayer_Archer()
@@ -77,8 +79,28 @@ APlayer_Archer::APlayer_Archer()
 	if (BowMesh.Succeeded()) {
 		BowMeshComp->SetSkeletalMesh(BowMesh.Object);
 	}
-	// 활===========
 
+	BowStringPlace = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BowStringPlace"));
+	BowStringPlace->SetupAttachment(BowMeshComp);
+	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
+
+	// 활시위
+	UpBowString = CreateDefaultSubobject<UCableComponent>(TEXT("UpBowString"));
+	UpBowString->SetupAttachment(BowMeshComp);
+	UpBowString->SetRelativeLocation(FVector(-5, 0, 30)); 
+	UpBowString->NumSegments = 1; // cable의 출렁이는 움직임 없애기
+	UpBowString->CableLength = 10.f; // cable의 길이
+	UpBowString->EndLocation = FVector(0); // cable의 end의 위치값
+
+	DownBowString = CreateDefaultSubobject<UCableComponent>(TEXT("DownBowString"));
+	DownBowString->SetupAttachment(BowMeshComp);
+	DownBowString->SetRelativeLocation(FVector(-4,0, -30));
+	DownBowString->NumSegments = 1; // cable의 출렁이는 움직임 없애기
+	DownBowString->CableLength = 10.f; // cable의 길이
+	DownBowString->EndLocation = FVector(0); // cable의 end의 위치값
+
+
+	// 활===========
 
 
 
@@ -112,6 +134,9 @@ void APlayer_Archer::BeginPlay()
 	// 트래킹 설정===============
 
 
+
+
+
 	// 화살 관련 ========================
 
 	// 초기화
@@ -122,6 +147,20 @@ void APlayer_Archer::BeginPlay()
 
 
 	// 화살 관련 ========================
+
+
+
+
+
+
+	// 활 관련 =======================================
+	// CableComponent를 움직일 수 있도록 준비한 Mesh에 attach -> BowStringPlace를 움직임으로써 활 시위가 당겨지는 모습 연출 가능
+	UpBowString->SetAttachEndToComponent(BowStringPlace);
+	DownBowString->SetAttachEndToComponent(BowStringPlace);
+
+
+
+	// 활 관련 =======================================
 
 
 
@@ -155,7 +194,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 	if (LoadArrow) {
 		LoadArrow->AttachToComponent(BowMeshComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
-		
+
 		LoadArrow->SetActorRelativeLocation(FVector(25, 1, 1));
 		LoadArrow->SetActorRelativeRotation(FRotator(0, -50, -50));
 		LoadArrow->SetActorScale3D(FVector(2));
@@ -173,7 +212,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 
 	// 화살 발사=====================================================
-	
+
 	if (GoArrow) {
 
 		// 화살 위치 업데이트
@@ -247,9 +286,11 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 	// 활 시위를 오른손에 attach 혹은 오른손 검지에 attach
 
+	//BowStringPlace->SetRelativeLocation(RightHand->GetRelativeLocation());
+
+	//BowStringPlace->AttachToComponent(RightHand);
 
 	// 공격 준비 상태로 bool변수 true로 전환
-
 
 
 
@@ -260,22 +301,23 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Trigger_Shot"));
 
 
+	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
 
 	// 화살 발사
-	
-	
+
+
 	if (LoadArrow) {
 		GoArrow = LoadArrow;
 
 		LoadArrow = nullptr;
 	}
 
-	
 
 
-	
 
-	
+
+
+
 
 
 
