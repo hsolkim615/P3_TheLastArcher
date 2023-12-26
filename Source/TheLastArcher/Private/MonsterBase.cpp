@@ -2,14 +2,27 @@
 
 
 #include "MonsterBase.h"
+
+#include "AI/MonsterAnim.h"
 #include "AI/MonsterFSM.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMonsterBase::AMonsterBase()
 {
 
 	PrimaryActorTick.bCanEverTick = true;
+	
 	MonsterFsm = CreateDefaultSubobject<UMonsterFSM>("MonsterFsm");
+
+
+	ConstructorHelpers::FClassFinder<UMonsterAnim> TempAnim(TEXT("/Script/Engine.AnimBlueprint'/Game/TheLastArchers/KSE/Animations/ABP_NormalMonster.ABP_NormalMonster_C'"));
+	if(TempAnim.Succeeded())
+	{
+		GetMesh()->SetAnimClass(TempAnim.Class);
+	}
+	// 플레이어를 쳐다보도록한다.
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
