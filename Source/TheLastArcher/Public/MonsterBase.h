@@ -7,6 +7,7 @@
 #include "MonsterBase.generated.h"
 
 class UMonsterFSM;
+class USkeletalMeshComponent;
 
 UCLASS()
 class THELASTARCHER_API AMonsterBase : public ACharacter
@@ -26,7 +27,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere)
 	UMonsterFSM* MonsterFsm;
+
+	
 	
 };

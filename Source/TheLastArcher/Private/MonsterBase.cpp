@@ -15,6 +15,8 @@ AMonsterBase::AMonsterBase()
 	
 	MonsterFsm = CreateDefaultSubobject<UMonsterFSM>("MonsterFsm");
 
+	
+
 
 	ConstructorHelpers::FClassFinder<UMonsterAnim> TempAnim(TEXT("/Script/Engine.AnimBlueprint'/Game/TheLastArchers/KSE/Animations/ABP_NormalMonster.ABP_NormalMonster_C'"));
 	if(TempAnim.Succeeded())
