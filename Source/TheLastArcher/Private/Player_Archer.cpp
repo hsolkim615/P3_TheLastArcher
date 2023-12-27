@@ -14,6 +14,7 @@
 #include "Arrow_Type/Arrow_Fire.h"
 #include "CableComponent.h"
 #include <../../../../../../../Source/Runtime/Engine/Classes/Components/StaticMeshComponent.h>
+#include <../../../../../../../Source/Runtime/Engine/Classes/Components/SphereComponent.h>
 
 // Sets default values
 APlayer_Archer::APlayer_Archer()
@@ -84,17 +85,28 @@ APlayer_Archer::APlayer_Archer()
 	BowStringPlace->SetupAttachment(BowMeshComp);
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
 
+	/*
+	BowStringPlace->SetRelativeScale3D(FVector(0.005));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>BSPMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cylinder.Shape_Cylinder'"));
+
+	if (BSPMesh.Succeeded()) {
+		BowStringPlace->SetStaticMesh(BSPMesh.Object);
+
+	}
+	*/
+
 	// 활시위
 	UpBowString = CreateDefaultSubobject<UCableComponent>(TEXT("UpBowString"));
 	UpBowString->SetupAttachment(BowMeshComp);
-	UpBowString->SetRelativeLocation(FVector(-5, 0, 30)); 
+	UpBowString->SetRelativeLocation(FVector(-5, 0, 30));
 	UpBowString->NumSegments = 1; // cable의 출렁이는 움직임 없애기
 	UpBowString->CableLength = 10.f; // cable의 길이
 	UpBowString->EndLocation = FVector(0); // cable의 end의 위치값
 
 	DownBowString = CreateDefaultSubobject<UCableComponent>(TEXT("DownBowString"));
 	DownBowString->SetupAttachment(BowMeshComp);
-	DownBowString->SetRelativeLocation(FVector(-4,0, -30));
+	DownBowString->SetRelativeLocation(FVector(-4, 0, -30));
 	DownBowString->NumSegments = 1; // cable의 출렁이는 움직임 없애기
 	DownBowString->CableLength = 10.f; // cable의 길이
 	DownBowString->EndLocation = FVector(0); // cable의 end의 위치값
@@ -105,10 +117,35 @@ APlayer_Archer::APlayer_Archer()
 
 
 
+	// collision =========================
+	// 활 시위 collision 
+	BowStringComllision = CreateDefaultSubobject<USphereComponent>(TEXT("BowStringComllision"));
+	BowStringComllision->SetupAttachment(BowStringPlace);
+	BowStringComllision->SetRelativeScale3D(FVector(0.3));
+
+	// 오른쪽 어깨 collision
+	CanShotPlaceCollision = CreateDefaultSubobject<USphereComponent>(TEXT("CanShotPlaceCollision"));
+	CanShotPlaceCollision->SetupAttachment(BowStringPlace);
+	CanShotPlaceCollision->SetRelativeLocation(FVector(-60, 0, 0));
+
+	// 오른손 collision
+	RightFingerCollision = CreateDefaultSubobject<USphereComponent>(TEXT("RightFingerCollision"));
+	RightFingerCollision->SetupAttachment(RightHand);
+	RightFingerCollision->SetRelativeLocation(FVector(0.6f, 12, -2.5));
+	RightFingerCollision->SetRelativeScale3D(FVector(0.2));
+
+
+
+	// collision =========================
+
+
 	/* *********************
 	// 스폰될 화살의 종류 초기화 - Normal
 	CurrentArrowType = EArrowType::NormalArrow;
 	*/
+
+
+	
 
 }
 
@@ -190,37 +227,6 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 
 
-	// 스폰된 화살 설정
-	if (LoadArrow) {
-		LoadArrow->AttachToComponent(BowMeshComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
-
-		LoadArrow->SetActorRelativeLocation(FVector(25, 1, 1));
-		LoadArrow->SetActorRelativeRotation(FRotator(0, -50, -50));
-		LoadArrow->SetActorScale3D(FVector(2));
-
-		/*
-		FVector LoadArrowLocation = BowMeshComp->GetBoneTransform(BowMeshComp->GetBoneIndex(TEXT("bowstring"))).GetLocation();
-		LoadArrow->SetActorRelativeLocation(LoadArrowLocation);
-
-		*/
-
-
-	}
-
-
-
-
-	// 화살 발사=====================================================
-
-	if (GoArrow) {
-
-		// 화살 위치 업데이트
-		NewArrowPosition = GoArrow->GetActorLocation() + ArrowDirection * ArrowSpeed * GetWorld()->DeltaRealTimeSeconds;
-
-		GoArrow->SetActorLocation(NewArrowPosition);
-
-	}
 
 }
 
@@ -290,9 +296,13 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 	//BowStringPlace->AttachToComponent(RightHand);
 
-
+	/*
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
 	BowStringPlace->AttachToComponent(RightHand, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
+	*/
+
+
+	BowStringPlace->SetWorldLocation(RightController->GetSocketLocation(FName("IndexFinger")));
 
 
 
@@ -303,21 +313,35 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Trigger_Shot"));
-
+	/*
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
 	BowStringPlace->AttachToComponent(BowMeshComp, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
+	*/
+
+
 
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
-
-	// 화살 발사
 
 
 	if (LoadArrow) {
 		GoArrow = LoadArrow;
-
+		LoadArrow->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		LoadArrow = nullptr;
 	}
 
+	// ===============
+	FVector BowMeshLocation = BowMeshComp->GetComponentLocation();
+	FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation();
+	
+
+	GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
+
+
+	// 화살 날리기
+	GoArrow->bIsShotArrow = true;
+
+	// 화살 재장전 가능하도록
+	bIsLoadArrow = false;
 
 }
 
@@ -328,8 +352,8 @@ void APlayer_Archer::LeftThumbStick_Move(const FInputActionValue& value)
 
 	FVector2D InputDirection = value.Get<FVector2D>();
 
-	PlayerDirection.X = InputDirection.Y * 0.3f;
-	PlayerDirection.Y = InputDirection.X * 0.3f;
+	PlayerDirection.X = InputDirection.Y * 0.5f;
+	PlayerDirection.Y = InputDirection.X * 0.5f;
 
 }
 
@@ -451,12 +475,15 @@ void APlayer_Archer::Spawn_NormalArrowFunc()
 
 	LoadArrow = GetWorld()->SpawnActor<AArrow_Base>(Factory_NomalArrow, ArrowSpawnPlace);
 
+	SetLoadArrow_Load();
 }
 
 void APlayer_Archer::Spawn_TeleportArrowFunc()
 {
 
 	LoadArrow = GetWorld()->SpawnActor<AArrow_Base>(Factory_TeleportArrow, ArrowSpawnPlace);
+
+	SetLoadArrow_Load();
 
 }
 
@@ -465,6 +492,46 @@ void APlayer_Archer::Spawn_FireArrowFunc()
 
 	LoadArrow = GetWorld()->SpawnActor<AArrow_Base>(Factory_FireArrow, ArrowSpawnPlace);
 
+	SetLoadArrow_Load();
+
+}
+
+void APlayer_Archer::SetLoadArrow_Load()
+{
+	// 스폰된 화살 설정
+	if (LoadArrow) {
+		LoadArrow->AttachToComponent(BowStringPlace, FAttachmentTransformRules::KeepRelativeTransform);
+		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
+
+		LoadArrow->SetActorRelativeLocation(FVector(45, -1, 0));
+		LoadArrow->SetActorRelativeRotation(FRotator(24, -50, -32));
+		LoadArrow->SetActorScale3D(FVector(3));
+
+
+
+
+	}
+}
+
+void APlayer_Archer::SetLoadArrow_Ready()
+{
+	if (LoadArrow) {
+		//LoadArrow->AttachToComponent(BowStringPlace, FAttachmentTransformRules::KeepRelativeTransform);
+		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
+
+		/*
+		LoadArrow->SetActorRelativeLocation(FVector(30, -1, 0));
+		LoadArrow->SetActorRelativeRotation(FRotator(-46, -67, 59));
+		LoadArrow->SetActorScale3D(FVector(2));
+		*/
+
+		LoadArrow->SetActorRelativeLocation(FVector(0));
+		LoadArrow->SetActorRelativeRotation(FRotator(0));
+		LoadArrow->SetActorScale3D(FVector(3));
+
+
+
+	}
 }
 
 

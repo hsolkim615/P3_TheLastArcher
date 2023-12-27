@@ -20,7 +20,7 @@ AArrow_Base::AArrow_Base()
 	}
 
 
-
+	
 
 }
 
@@ -36,5 +36,10 @@ void AArrow_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bIsShotArrow == true) {
+
+		SetActorLocation(GetActorLocation() + ArrowGoingDirection * ArrowSpeed * DeltaTime);
+
+	}
 }
 

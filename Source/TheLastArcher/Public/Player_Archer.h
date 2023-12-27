@@ -83,7 +83,25 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class UCableComponent* DownBowString;
-	//TObjectPtr<class UCableComponent> DownBowString;
+
+
+
+	// Collision
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USphereComponent* BowStringComllision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USphereComponent* CanShotPlaceCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USphereComponent* RightFingerCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsNowOverlaping_RightHand_BowString = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsNowOverlaping_RightHand_ShotPoint = false;
+
 
 	// 생성자 ==============
 
@@ -160,12 +178,11 @@ private: // Bind Function
 	FVector NewArrowPosition;
 
 	// 공격 준비 상태로 bool변수 false로 전환
-	float ArrowSpeed = 1000.0f; // 화살의 이동 속도
-	FVector ArrowDirection = FVector(1.0f, 0.0f, 0.0f); // X축 방향으로 이동하는 것으로 가정
 
 
 
-
+	// 화살 날아가는 방향 설정
+	
 
 
 
@@ -195,6 +212,11 @@ public: // 화살 스폰 함수
 	void Spawn_FireArrowFunc();
 
 
+
+
+	void SetLoadArrow_Load();
+
+	void SetLoadArrow_Ready();
 
 
 public:

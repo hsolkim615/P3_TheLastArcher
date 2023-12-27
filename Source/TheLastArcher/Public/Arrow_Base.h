@@ -15,6 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	AArrow_Base();
 
+	float ArrowSpeed = 1000.0f;
+
+	bool bIsShotArrow = false;
+
+	FVector ArrowDirection = GetActorForwardVector();
+
+	FVector ArrowGoingDirection;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -22,6 +30,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 
 
 public:
