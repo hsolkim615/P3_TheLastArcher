@@ -67,7 +67,7 @@ public:
 	bool UpdateRandomLocation(FVector OldLoc, float Radius, FVector& NewLoc);
 	
 	// 공격 가능거리
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float AttackRange;
 
 	float CurrentTime;
@@ -86,13 +86,13 @@ public:
 public:
 	void SetState(EMonsterState Next);
 
-private:
+protected:
 	
-	void TickIdle();
-	void TickMove();
-	void TickAttack();
-	void TickDamage();
-	void TickDie();
+	virtual void TickIdle();
+	virtual void TickMove();
+	virtual void TickAttack();
+	virtual void TickDamage();
+	virtual void TickDie();
 
 public:
 	UPROPERTY()
