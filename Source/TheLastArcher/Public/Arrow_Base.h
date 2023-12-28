@@ -35,7 +35,12 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere)
+	class UCapsuleComponent* ArrowCollisionComp;
+
+	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* ArrowMeshComp;
+
+
 	
 
 	

@@ -292,16 +292,18 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 	// 활 시위를 오른손에 attach 혹은 오른손 검지에 attach
 
+	/*
 	//BowStringPlace->SetRelativeLocation(RightHand->GetRelativeLocation());
 
 	//BowStringPlace->AttachToComponent(RightHand);
 
-	/*
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
 	BowStringPlace->AttachToComponent(RightHand, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
 	*/
 
+	// 활시위 collision과 오른손 collision이 overlap중인 경우 - if문
 
+	// 활 시위의 위치를 오른손의 소켓과 같게 세팅
 	BowStringPlace->SetWorldLocation(RightController->GetSocketLocation(FName("IndexFinger")));
 
 
@@ -319,30 +321,36 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 	*/
 
 
-
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
 
+
+
+	// 오른손 collision과 shot collision이 overlap 중인 경우 - if문
 
 	if (LoadArrow) {
 		GoArrow = LoadArrow;
 		LoadArrow->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		LoadArrow = nullptr;
+
 	}
 
 	// ===============
-	FVector BowMeshLocation = BowMeshComp->GetComponentLocation();
-	FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation();
+	FVector BowMeshLocation = BowMeshComp->GetComponentLocation(); // 활의 위치
+	FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // 활 시위의 위치
 	
+	if (GoArrow) {
+		// 화살이 날아가는 방향
+		GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
 
-	GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
+		// 화살을 날리도록 AArrow_Base의 bool변수를 true로 함
+		GoArrow->bIsShotArrow = true;
 
+		// 화살 재장전 가능하도록
+		bIsLoadArrow = false;
 
-	// 화살 날리기
-	GoArrow->bIsShotArrow = true;
+	}
 
-	// 화살 재장전 가능하도록
-	bIsLoadArrow = false;
-
+	
 }
 
 
