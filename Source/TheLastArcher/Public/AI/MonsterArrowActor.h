@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "MonsterArrowActor.generated.h"
 
+class UProjectileMovementComponent;
+class UCapsuleComponent;
+
 UCLASS()
 class THELASTARCHER_API AMonsterArrowActor : public AActor
 {
@@ -22,5 +25,17 @@ protected:
 public:	
 	
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	UPROPERTY(EditAnywhere)
+	UCapsuleComponent* CapsuleComp;
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* Arrow;
+	UPROPERTY(EditAnywhere)
+	UProjectileMovementComponent* ProjectileMovementComp;
+
+	float Damage = 10;
 	
+	UFUNCTION()
+	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

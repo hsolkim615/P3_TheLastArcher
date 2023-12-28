@@ -13,6 +13,7 @@ UCLASS()
 class THELASTARCHER_API URangerMonsterFSM : public UMonsterFSM
 {
 	GENERATED_BODY()
+
 	
 	void SpawnArrow();
 };
