@@ -26,7 +26,8 @@ void UStatesComponent::BeginPlay()
 	// 만약 제대로 들어갔다면
 	if(Owner)
 	{
-		// 데미지 받는 함수를 바인딩하자.
+		// 데미지 받는 함수를 바인딩하자.(델리게이트)
+		// 호출되면 함수 실행이된다.
 		Owner->OnTakeAnyDamage.AddDynamic(this,&UStatesComponent::TakeDamage);
 	}
 }
