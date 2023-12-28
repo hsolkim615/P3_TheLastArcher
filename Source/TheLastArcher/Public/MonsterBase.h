@@ -6,7 +6,10 @@
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
+class UStatesComponent;
+class UNavigationInvokerComponent;
 class UMonsterFSM;
+class USkeletalMeshComponent;
 
 UCLASS()
 class THELASTARCHER_API AMonsterBase : public ACharacter
@@ -26,7 +29,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere)
 	UMonsterFSM* MonsterFsm;
+
+	UPROPERTY(EditAnywhere)
+	UStatesComponent* HP;
+	
+	
 	
 };
