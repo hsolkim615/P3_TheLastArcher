@@ -88,7 +88,7 @@ public:
 
 	// Collision
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class USphereComponent* BowStringComllision;
+	class USphereComponent* BowStringCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* CanShotPlaceCollision;
@@ -144,9 +144,6 @@ public:
 	// 화살 스폰될 위치 
 	FTransform ArrowSpawnPlace;
 	
-	/* ****************
-	EArrowType CurrentArrowType;
-	*/
 
 
 
@@ -178,10 +175,9 @@ private: // Bind Function
 	FVector NewArrowPosition;
 
 	// 공격 준비 상태로 bool변수 false로 전환
+	bool CatchString_ReadyAttack = false;
 
 
-
-	// 화살 날아가는 방향 설정
 	
 
 

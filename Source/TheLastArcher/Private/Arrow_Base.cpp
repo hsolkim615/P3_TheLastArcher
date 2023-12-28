@@ -49,8 +49,14 @@ void AArrow_Base::Tick(float DeltaTime)
 	if (bIsShotArrow == true) {
 
 		// ArrowGoingDirection의 방향으로 화살이 날아가도록 함
-		SetActorLocation(GetActorLocation() + ArrowGoingDirection * ArrowSpeed * DeltaTime);
+		this->SetActorLocation(GetActorLocation() + ArrowGoingDirection * ArrowSpeed * DeltaTime);
 
 	}
+}
+
+void AArrow_Base::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	
 }
 
