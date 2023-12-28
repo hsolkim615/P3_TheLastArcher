@@ -184,8 +184,8 @@ void APlayer_Archer::BeginPlay()
 	Choose_Normal = true;
 
 	// 화살 스폰될 위치 - 바꿔야 됨
-	ArrowSpawnPlace = BowMeshComp->GetBoneTransform(TEXT("bowstring"));
-
+	//ArrowSpawnPlace = BowMeshComp->GetBoneTransform(TEXT("bowstring"));
+	ArrowSpawnPlace = BowMeshComp->GetRelativeTransform();
 
 	// 화살 관련 ========================
 

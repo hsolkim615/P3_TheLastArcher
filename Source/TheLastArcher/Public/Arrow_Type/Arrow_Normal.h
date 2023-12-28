@@ -14,7 +14,12 @@ class THELASTARCHER_API AArrow_Normal : public AArrow_Base
 {
 	GENERATED_BODY()
 
+public:
+	AArrow_Normal();
+
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-	
+private:
+	UPROPERTY(EditAnywhere, Meta = (AllowPrivateAccess))
+	float Damage;
 };
