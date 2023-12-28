@@ -9,6 +9,8 @@
 #include "MonsterFSM.generated.h"
 
 
+class UStatesComponent;
+class AAIController;
 class UMonsterAnim;
 class UNormalMonsterAnimInstance;
 class APlayer_Archer;
@@ -51,6 +53,19 @@ public:
 	UPROPERTY()
 	APlayer_Archer* Target;
 
+
+
+public:
+	//AI 컨트롤러를 이용하여 길찾기를 하고싶다.
+	//AI 컨트롤를 사용하려면 AI Module 을 추가해야한다. 
+	UPROPERTY()
+	AAIController* Ai;
+	
+	FVector RandomLocation;
+
+	// 정찰하는 함수를 만든다.
+	bool UpdateRandomLocation(FVector OldLoc, float Radius, FVector& NewLoc);
+	
 	// 공격 가능거리
 	UPROPERTY(EditAnywhere)
 	float AttackRange;
@@ -64,6 +79,8 @@ public:
 	// 공격 쿨타임
 	UPROPERTY(EditAnywhere)
 	float AttackTime = 2;
+
+	
 	
 	
 public:
@@ -89,5 +106,5 @@ public:
 	// 죽는 애니메이션
 	void PlayMontageDie();
 	
-	
+
 };

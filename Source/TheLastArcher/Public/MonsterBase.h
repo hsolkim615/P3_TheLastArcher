@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
+class UStatesComponent;
+class UNavigationInvokerComponent;
 class UMonsterFSM;
 class USkeletalMeshComponent;
 
@@ -30,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	UMonsterFSM* MonsterFsm;
 
+	UPROPERTY(EditAnywhere)
+	UStatesComponent* HP;
+	
 	
 	
 };

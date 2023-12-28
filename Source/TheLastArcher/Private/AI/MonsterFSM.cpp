@@ -2,19 +2,25 @@
 
 
 #include "AI/MonsterFSM.h"
-
 #include "AsyncTreeDifferences.h"
 #include "ComponentSourceInterfaces.h"
 #include "MonsterBase.h"
+#include "NavigationInvokerComponent.h"
+#include "NavigationSystem.h"
 #include "Player_Archer.h"
 #include "AI/MonsterAnim.h"
+#include "Editor/VREditor/Private/UI/VREditorBaseUserWidget.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Navigation/PathFollowingComponent.h"
+#include "Runtime/AIModule/Classes/AIController.h"
+#include "StatesComponent.h"
 
 
 UMonsterFSM::UMonsterFSM()
 {
 
 	PrimaryComponentTick.bCanEverTick = true;
+	
 	
 	
 }
@@ -29,6 +35,9 @@ void UMonsterFSM::BeginPlay()
 	Self = Cast<AMonsterBase>(GetOwner());
 
 	MonsterAnim = Cast<UMonsterAnim>(Self->GetMesh()->GetAnimInstance());
+
+	// AI컨트롤러 생성
+	Ai = Cast<AAIController>(Self->GetController());
 	
 }
 
@@ -51,6 +60,27 @@ void UMonsterFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 }
 
 
+bool UMonsterFSM::UpdateRandomLocation(FVector OldLoc, float Radius, FVector& NewLoc)
+{
+	// 네이게이션 시스템을 이용하여
+	auto NS = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+	FNavLocation Location;
+	// 네비게이션 시스템 안에 랜덤으로 움직이는 함수를 가져와서 결과 값에 넣어주고
+	bool Result = NS->GetRandomReachablePointInRadius(OldLoc,Radius,Location);
+	// 랜덤위치가 정해지면
+	if(Result == true)
+	{
+		// 그위치를 반환하고
+		NewLoc = Location.Location;
+		return true;
+	}
+	else
+	{
+		// 랜덤한위치를 찾지 못했을 때 재귀호출하여 다시 위치를 찾는다.
+		return UpdateRandomLocation(OldLoc,Radius,NewLoc);
+	}
+	
+}
 
 
 void UMonsterFSM::TickIdle()
@@ -74,8 +104,40 @@ void UMonsterFSM::TickMove()
 	UE_LOG(LogTemp,Warning,TEXT("Move!"))
 	// 목적지를 향해 이동하고싶다.
 	FVector Direction = Target->GetActorLocation() - Self->GetActorLocation();
+	FVector Destination = Target->GetActorLocation();
+	//Self->AddMovementInput(Direction.GetSafeNormal());
+
+	// 타겟이 길위에 있다면
+	// 네비게이션 시스템을 가져온다.
+	UNavigationSystemV1* NS = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+	FPathFindingQuery Query;
+	FAIMoveRequest Req;
+	Req.SetAcceptanceRadius(50);
+	Req.SetGoalLocation(Destination);
+	// 요청하여 쿼리를 만드는 작업
+	Ai->BuildPathfindingQuery(Req,Query);
+	auto Result = NS->FindPathSync(Query);
+	if(Result.IsSuccessful())
+	{
+		// 타겟을 향해서 이동하고싶다.
+		Ai->MoveToLocation(Destination);
 	
-	Self->AddMovementInput(Direction.GetSafeNormal());
+	}
+	// 그렇지 않다면
+	else
+	{
+		
+		// Patrol 하고싶다.
+		// 길 위에 랜덤한 위치를 하나 정해서 그곳으로 이동하고싶다.
+		FPathFollowingRequestResult R;
+		R.Code = Ai->MoveToLocation(RandomLocation);
+		// 만약 그곳에 도착하거나 문제가 있다면 랜덤한 위치를 갱신하고 싶다.
+		if(R!= EPathFollowingRequestResult::RequestSuccessful)
+		{
+			UpdateRandomLocation(Self->GetActorLocation(),500,RandomLocation);
+		}
+	}
+	
 
 	// 공격 가능 거리라면
 	if(Direction.Length() <= AttackRange)
@@ -83,6 +145,7 @@ void UMonsterFSM::TickMove()
 		// 공격 상태로 전이하고싶다.
 		SetState(EMonsterState::Attack);
 		CurrentTime = AttackTime;
+		Ai->StopMovement();
 	}
 	
 	
@@ -109,6 +172,7 @@ void UMonsterFSM::TickAttack()
 		// 공격 범위를 벗어나지 않았으면
 		else
 		{
+			Ai->SetFocus(Target,EAIFocusPriority::Gameplay);
 			// 공격한다.
 			UE_LOG(LogTemp,Warning,TEXT("Attack!"));
 		}
@@ -156,6 +220,13 @@ void UMonsterFSM::PlayMontageDie()
 
 void UMonsterFSM::SetState(EMonsterState Next)
 {
+	// 만약 이동상태로 전이할때
+	if(Next == EMonsterState::Move)
+	{
+		// 상대가 없으면 정찰모드로 돌아간다.
+		UpdateRandomLocation(Self->GetActorLocation(),500,RandomLocation);
+
+	}
 	State = Next;
 	MonsterAnim-> State = Next; 
 	CurrentTime = 0;
