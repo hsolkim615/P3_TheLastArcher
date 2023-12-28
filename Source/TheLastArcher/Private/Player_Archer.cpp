@@ -74,6 +74,9 @@ APlayer_Archer::APlayer_Archer()
 	// 활===========
 	BowMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BowMeshComp"));
 	BowMeshComp->SetupAttachment(LeftHand);
+	BowMeshComp->SetRelativeLocation(FVector(-8.5, 9, -2.5));
+	BowMeshComp->SetRelativeRotation(FRotator(13, 90, -90));
+	BowMeshComp->SetRelativeScale3D(FVector(1.5, 1.5, 3));
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>BowMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Resource/Bow/uploads_files_3856554_bow.uploads_files_3856554_bow'"));
 
@@ -119,21 +122,22 @@ APlayer_Archer::APlayer_Archer()
 
 	// collision =========================
 	// 활 시위 collision 
-	BowStringComllision = CreateDefaultSubobject<USphereComponent>(TEXT("BowStringComllision"));
-	BowStringComllision->SetupAttachment(BowStringPlace);
-	BowStringComllision->SetRelativeScale3D(FVector(0.3));
+	BowStringCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BowStringComllision"));
+	BowStringCollision->SetupAttachment(BowStringPlace);
+	BowStringCollision->SetRelativeScale3D(FVector(0.3));
 
 	// 오른쪽 어깨 collision
 	CanShotPlaceCollision = CreateDefaultSubobject<USphereComponent>(TEXT("CanShotPlaceCollision"));
 	CanShotPlaceCollision->SetupAttachment(BowStringPlace);
 	CanShotPlaceCollision->SetRelativeLocation(FVector(-60, 0, 0));
-
+	
+	/*
 	// 오른손 collision
 	RightFingerCollision = CreateDefaultSubobject<USphereComponent>(TEXT("RightFingerCollision"));
 	RightFingerCollision->SetupAttachment(RightHand);
 	RightFingerCollision->SetRelativeLocation(FVector(0.6f, 12, -2.5));
 	RightFingerCollision->SetRelativeScale3D(FVector(0.2));
-
+	*/
 
 
 	// collision =========================
@@ -145,7 +149,7 @@ APlayer_Archer::APlayer_Archer()
 	*/
 
 
-	
+
 
 }
 
@@ -290,7 +294,6 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Trigger_Ready"));
 
-	// 활 시위를 오른손에 attach 혹은 오른손 검지에 attach
 
 	/*
 	//BowStringPlace->SetRelativeLocation(RightHand->GetRelativeLocation());
@@ -301,11 +304,32 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 	BowStringPlace->AttachToComponent(RightHand, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
 	*/
 
-	// 활시위 collision과 오른손 collision이 overlap중인 경우 - if문
+
+	/*
+	// 활시위 collision과 RightMesh가 overlap중인 경우 - if문
+	if (BowStringCollision->IsOverlappingComponent(RightHand) == true) {
+		
+		UE_LOG(LogTemp, Warning, TEXT("Success overlap"));
+
+
+		// 활 시위의 위치를 오른손의 소켓과 같게 세팅
+		BowStringPlace->SetWorldLocation(RightController->GetSocketLocation(FName("IndexFinger")));
+
+		CatchString_ReadyAttack = true;
+	}
+	*/
 
 	// 활 시위의 위치를 오른손의 소켓과 같게 세팅
 	BowStringPlace->SetWorldLocation(RightController->GetSocketLocation(FName("IndexFinger")));
 
+	float speed = 3000.f;
+
+	if (LoadArrow) {
+		
+		FVector EndLocation = LoadArrow->GetActorLocation() + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())* speed).GetSafeNormal() * 1000.0f;
+
+		DrawDebugLine( GetWorld(), BowMeshComp->GetComponentLocation(), EndLocation, FColor::Green, false, -1, 0, 2.0f  );
+	}
 
 
 	// 공격 준비 상태로 bool변수 true로 전환
@@ -320,8 +344,8 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 	BowStringPlace->AttachToComponent(BowMeshComp, AttachmentRules, NAME_None); // 소켓 이름 대신 NAME_None 사용
 	*/
 
-
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
+
 
 
 
@@ -337,12 +361,12 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 	// ===============
 	FVector BowMeshLocation = BowMeshComp->GetComponentLocation(); // 활의 위치
 	FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // 활 시위의 위치
-	
+
 	if (GoArrow) {
 		// 화살이 날아가는 방향
 		GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
 
-		// 화살을 날리도록 AArrow_Base의 bool변수를 true로 함
+		// AArrow_Base클래스에서 tick으로 화살을 날리도록, AArrow_Base의 bool변수를 true로 함
 		GoArrow->bIsShotArrow = true;
 
 		// 화살 재장전 가능하도록
@@ -350,7 +374,7 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 
 	}
 
-	
+
 }
 
 
@@ -511,9 +535,9 @@ void APlayer_Archer::SetLoadArrow_Load()
 		LoadArrow->AttachToComponent(BowStringPlace, FAttachmentTransformRules::KeepRelativeTransform);
 		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
 
-		LoadArrow->SetActorRelativeLocation(FVector(45, -1, 0));
-		LoadArrow->SetActorRelativeRotation(FRotator(24, -50, -32));
-		LoadArrow->SetActorScale3D(FVector(3));
+		LoadArrow->SetActorRelativeLocation(FVector(65, 0.5f, 0));
+		LoadArrow->SetActorRelativeRotation(FRotator(67, 137, 146));
+		LoadArrow->SetActorRelativeScale3D(FVector(1));
 
 
 

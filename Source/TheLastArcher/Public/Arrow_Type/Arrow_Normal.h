@@ -13,5 +13,8 @@ UCLASS()
 class THELASTARCHER_API AArrow_Normal : public AArrow_Base
 {
 	GENERATED_BODY()
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 	
 };
