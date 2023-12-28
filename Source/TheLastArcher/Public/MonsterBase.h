@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
+class URangerMonsterFSM;
 class UStatesComponent;
 class UNavigationInvokerComponent;
 class UMonsterFSM;
@@ -29,11 +30,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UMonsterFSM* MonsterFsm;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UStatesComponent* HP;
+
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* ArrowComp;
 	
 	
 	

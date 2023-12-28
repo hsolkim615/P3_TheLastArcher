@@ -47,10 +47,12 @@ void AMonsterArrowActor::Tick(float DeltaTime)
 void AMonsterArrowActor::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
                                       bool bFromSweep, const FHitResult& SweepResult)
 {
-	// if(OtherActor == Cast<APlayer_Archer>(OtherActor))
-	if(OtherActor &&(OtherActor != this) && OtherComp)
+	if(OtherActor != Cast<APlayer_Archer>(OtherActor))
 	{
-		OtherActor->TakeDamage(Damage, FDamageEvent(UDamageType::StaticClass()), nullptr, this);
-		
+		if(OtherActor &&(OtherActor != this) && OtherComp)
+		{
+			OtherActor->TakeDamage(Damage, FDamageEvent(UDamageType::StaticClass()), nullptr, this);
+		}
 	}
+	
 }

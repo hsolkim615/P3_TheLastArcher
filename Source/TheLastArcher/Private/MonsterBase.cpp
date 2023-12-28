@@ -7,7 +7,9 @@
 #include "AI/MonsterAnim.h"
 #include "AI/MonsterFSM.h"
 #include "StatesComponent.h"
+#include "AI/RangerMonsterFSM.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/ArrowComponent.h"
 
 
 // Sets default values
@@ -17,10 +19,13 @@ AMonsterBase::AMonsterBase()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	MonsterFsm = CreateDefaultSubobject<UMonsterFSM>("MonsterFsm");
+	
 
 	HP = CreateDefaultSubobject<UStatesComponent>("HP");
 
-	
+	ArrowComp = CreateDefaultSubobject<UArrowComponent>("ArrowComp");
+	ArrowComp -> SetupAttachment(RootComponent);
+	ArrowComp -> SetRelativeLocation(FVector(70.0f,0,3.0f));
 
 
 	ConstructorHelpers::FClassFinder<UMonsterAnim> TempAnim(TEXT("/Script/Engine.AnimBlueprint'/Game/TheLastArchers/KSE/Animations/ABP_NormalMonster.ABP_NormalMonster_C'"));
