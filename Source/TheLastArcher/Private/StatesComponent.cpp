@@ -37,10 +37,12 @@ void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 	// 데미지가 음수 값이면 반영하지말고
 	if(Damage <= 0)
 	{
+		IsDied = true;
 		return;
 	}
 	// 데미지가 들어오면 CurrentHealth에서 데미지 값을 빼라.
 	CurrentHealth = FMath::Clamp(CurrentHealth-Damage,0.0f,MaxHealth);
+	IsDamaged = true;
 }
 
 

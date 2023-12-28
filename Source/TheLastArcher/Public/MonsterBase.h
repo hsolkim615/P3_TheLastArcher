@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UMonsterFSM* MonsterFsm;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UStatesComponent* HP;
 	
 	

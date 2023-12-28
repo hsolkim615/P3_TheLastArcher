@@ -181,29 +181,37 @@ void UMonsterFSM::TickAttack()
 
 void UMonsterFSM::TickDamage()
 {
-	CurrentTime += GetWorld()->GetDeltaSeconds();
-	// 2초동안 대기 했다가
-	if(CurrentTime > DamageTime)
+	if(Self->HP->IsDamaged == true)
 	{
-		// 맞는 애니메이션을 하고
-		PlayMontageHit();
-		UE_LOG(LogTemp,Warning,TEXT("Hit!"));
-		// 이동상태로 전이 하고싶다.
-		SetState(EMonsterState::Move);
+		CurrentTime += GetWorld()->GetDeltaSeconds();
+		// 2초동안 대기 했다가
+		if(CurrentTime > DamageTime)
+		{
+			// 맞는 애니메이션을 하고
+			PlayMontageHit();
+			UE_LOG(LogTemp,Warning,TEXT("Hit!"));
+			// 이동상태로 전이 하고싶다.
+			Self->HP->IsDamaged = false;
+			SetState(EMonsterState::Move);
+		}
+	
 	}
 	
 }
 
 void UMonsterFSM::TickDie()
 {
-	PlayMontageDie();
-	UE_LOG(LogTemp,Warning,TEXT("Hit!"));
-	CurrentTime += GetWorld()->GetDeltaSeconds();
-	if(CurrentTime>Dietime)
+	if(Self->HP->IsDied == true)
 	{
-		// 2초동안 대기 했다각
-		// 애니메이션을 작동하고 죽고싶다.
-		Self->Destroy();
+		PlayMontageDie();
+		UE_LOG(LogTemp,Warning,TEXT("Hit!"));
+		CurrentTime += GetWorld()->GetDeltaSeconds();
+		if(CurrentTime>Dietime)
+		{
+			// 2초동안 대기 했다각
+			// 애니메이션을 작동하고 죽고싶다.
+			Self->Destroy();
+		}
 	}
 	
 }

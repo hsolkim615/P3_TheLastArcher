@@ -28,8 +28,14 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float CurrentHealth;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool IsDamaged = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool IsDied = false;
+
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void TakeDamage( AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	
 	
