@@ -330,7 +330,7 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 		
 		FVector EndLocation = LoadArrow->GetActorLocation() + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())* speed).GetSafeNormal() * 1000.0f;
 
-		DrawDebugLine( GetWorld(), BowMeshComp->GetComponentLocation(), EndLocation, FColor::Green, false, -1, 0, 2.0f  );
+		//DrawDebugLine( GetWorld(), BowMeshComp->GetComponentLocation(), EndLocation, FColor::Green, false, -1, 0, 2.0f  );
 	}
 
 
@@ -446,6 +446,7 @@ void APlayer_Archer::LeftTrigger_LoadArrow(const FInputActionValue& value)
 
 void APlayer_Archer::LeftGrip_ChangeArrowType(const FInputActionValue& value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Success Left Grip_Pressed"));
 
 	// 함수 반복 안되도록 bool값 추가 필요 
 
@@ -510,6 +511,8 @@ void APlayer_Archer::LeftGrip_ChangeArrowType(const FInputActionValue& value)
 
 void APlayer_Archer::LeftGrip_ChangeArrow_Bool(const FInputActionValue& value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Success Left Grip_Released"));
+
 	bIsChangeArrow = true;
 }
 

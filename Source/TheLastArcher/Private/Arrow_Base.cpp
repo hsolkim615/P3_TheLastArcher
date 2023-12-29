@@ -39,6 +39,8 @@ void AArrow_Base::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
+
 }
 
 // Called every frame

@@ -3,3 +3,7 @@
 
 #include "Arrow_Type/Arrow_Teleport.h"
 
+AArrow_Teleport::AArrow_Teleport()
+{
+	
+}
