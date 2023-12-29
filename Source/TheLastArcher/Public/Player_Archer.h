@@ -178,7 +178,7 @@ private: // Bind Function
 	bool CatchString_ReadyAttack = false;
 
 
-	
+	bool bIsChangeArrow = true;
 
 
 
@@ -196,6 +196,7 @@ private: // Bind Function
 	void LeftTrigger_LoadArrow(const FInputActionValue& value); // 플레이어 화살 장전
 
 	void LeftGrip_ChangeArrowType(const FInputActionValue& value); // 플레이어 화살 종류 전환
+	void LeftGrip_ChangeArrow_Bool(const FInputActionValue& value); // 플레이어 화살 종류 전환
 
 
 
