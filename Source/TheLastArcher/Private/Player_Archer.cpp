@@ -184,8 +184,8 @@ void APlayer_Archer::BeginPlay()
 	Choose_Normal = true;
 
 	// 화살 스폰될 위치 - 바꿔야 됨
-	ArrowSpawnPlace = BowMeshComp->GetBoneTransform(TEXT("bowstring"));
-
+	//ArrowSpawnPlace = BowMeshComp->GetBoneTransform(TEXT("bowstring"));
+	ArrowSpawnPlace = BowMeshComp->GetRelativeTransform();
 
 	// 화살 관련 ========================
 
@@ -269,6 +269,8 @@ void APlayer_Archer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		// 플레이어 화살 종류 전환 - 왼손 그립*
 		EnhancedInputComponent->BindAction(IA_LeftGrip, ETriggerEvent::Triggered, this, &APlayer_Archer::LeftGrip_ChangeArrowType);
+		EnhancedInputComponent->BindAction(IA_LeftGrip, ETriggerEvent::Completed, this, &APlayer_Archer::LeftGrip_ChangeArrow_Bool);
+
 
 		// 플레이어 활 인벤토리 열기/닫기
 
@@ -463,40 +465,52 @@ void APlayer_Archer::LeftGrip_ChangeArrowType(const FInputActionValue& value)
 	}
 	*/
 
+	if (bIsChangeArrow == true) {
 
+		if (Choose_Normal == true) {
 
-	if (Choose_Normal == true) {
+			Choose_Normal = false;
 
-		Choose_Normal = false;
+			Choose_Teleport = true;
 
-		Choose_Teleport = true;
-
-	}
-	else if (Choose_Teleport == true) {
-
-		Choose_Teleport = false;
-
-		if (GetItemFire == true) {
-
-			Choose_Fire = true;
 		}
-		else if (GetItemFire == false) {
+		else if (Choose_Teleport == true) {
+
+			Choose_Teleport = false;
 
 			Choose_Normal = true;
 
+
+			/*
+			if (GetItemFire == true) {
+
+				Choose_Fire = true;
+			}
+			else if (GetItemFire == false) {
+
+				Choose_Normal = true;
+
+			}
+			*/
 		}
+		/*
+		else if (Choose_Fire == true) {
 
+			Choose_Fire = false;
+
+			Choose_Normal = true;
+		}
+		*/
 	}
-	else if (Choose_Fire == true) {
-
-		Choose_Fire = false;
-
-		Choose_Normal = true;
-	}
 
 
+	bIsChangeArrow  = false;
 
+}
 
+void APlayer_Archer::LeftGrip_ChangeArrow_Bool(const FInputActionValue& value)
+{
+	bIsChangeArrow = true;
 }
 
 
