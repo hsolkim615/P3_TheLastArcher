@@ -45,12 +45,14 @@ void URangerMonsterFSM::TickAttack()
 		else
 		{
 			Ai->SetFocus(Target,EAIFocusPriority::Gameplay);
+			SpawnArrow();
 		}
 	}
 }
 
 void URangerMonsterFSM::SpawnArrow()
 {
+	//UE_LOG()
 	FTransform ShootPoint = Self->ArrowComp->GetComponentTransform();
 	GetWorld()->SpawnActor<AMonsterArrowActor>(ArrowClass,ShootPoint);
 	

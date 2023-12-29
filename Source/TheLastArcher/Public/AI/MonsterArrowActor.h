@@ -34,6 +34,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComp;
 
+	float Speed = 800;
 	float Damage = 10;
 	
 	UFUNCTION()

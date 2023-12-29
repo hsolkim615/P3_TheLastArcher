@@ -26,7 +26,7 @@ class THELASTARCHER_API URangerMonsterFSM : public UMonsterFSM
 	void SpawnArrow();
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="SpawnArrow")
 	TSubclassOf<class AMonsterArrowActor> ArrowClass;
 
 	

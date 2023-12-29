@@ -31,6 +31,8 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TSubclassOf<UMonsterFSM> MonsterFsmClass;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UMonsterFSM* MonsterFsm;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)

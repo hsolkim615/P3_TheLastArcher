@@ -17,9 +17,8 @@ AMonsterBase::AMonsterBase()
 {
 
 	PrimaryActorTick.bCanEverTick = true;
-	
-	MonsterFsm = CreateDefaultSubobject<UMonsterFSM>("MonsterFsm");
-	
+
+	MonsterFsm = CreateDefaultSubobject<UMonsterFSM>(TEXT("MonsterFSM"));
 
 	HP = CreateDefaultSubobject<UStatesComponent>("HP");
 

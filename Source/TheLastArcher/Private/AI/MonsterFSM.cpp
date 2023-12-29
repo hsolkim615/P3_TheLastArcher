@@ -153,7 +153,7 @@ void UMonsterFSM::TickMove()
 
 void UMonsterFSM::TickAttack()
 {
-	
+	UE_LOG(LogTemp,Warning,TEXT("UMonsterFSM::TickAttack"));
 	// Attack Wait
 	CurrentTime += GetWorld()->GetDeltaSeconds();
 	// 공격쿨타임이 되면
