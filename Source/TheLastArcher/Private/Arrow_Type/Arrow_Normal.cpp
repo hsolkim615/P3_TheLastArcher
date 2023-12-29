@@ -19,20 +19,21 @@ AArrow_Normal::AArrow_Normal()
 void AArrow_Normal::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-
+	/*
 	if (UStatesComponent* StatesComponent = Cast<UStatesComponent>(OtherActor->GetComponentByClass(UStatesComponent::StaticClass())))
 	{
 		StatesComponent->TakeDamage(OtherActor, Damage, NewObject<UNormalArrow_Type>(), nullptr, this);
 		
 		this->Destroy();
 	}
+	*/
 
-
-	/*if (OtherActor && OtherActor->IsA<AMonsterBase>()) {
+	if (OtherActor && OtherActor->IsA<AMonsterBase>()) {
 		UE_LOG(LogTemp, Warning, TEXT("Hit Monster"));
-
 		HitMonster = Cast<AMonsterBase>(OtherActor);
 
+		HitMonster->MonsterHP -= Damage;
+		/*
 		const UNormalArrow_Type* NormalArrow_Type = NewObject<UNormalArrow_Type>();
 
 		if (HitMonster && HitMonster->HP) {
@@ -43,10 +44,12 @@ void AArrow_Normal::NotifyActorBeginOverlap(AActor* OtherActor)
 			HitMonster->TakeDamage(HitMonster, 20.f, NormalArrow_Type, nullptr, this);
 
 		}
+		*/
+
 
 		this->Destroy();
 
-	}*/
+	}
 	
 
 }

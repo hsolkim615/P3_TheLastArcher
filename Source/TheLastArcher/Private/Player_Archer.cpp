@@ -221,7 +221,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 	FVector dir = ControllerTransform.TransformVector(PlayerDirection);
 
-	this->AddMovementInput(dir);
+	this->AddMovementInput(dir * 0.5f);
 
 	PlayerDirection = FVector::ZeroVector;
 	// Player ¿Ãµø================================
@@ -287,7 +287,7 @@ void APlayer_Archer::RightThumbStick_Turn(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Stick"));
 
-	float PlayerRotation = 0.2f * value.Get<float>();
+	float PlayerRotation = 0.3f * value.Get<float>();
 	AddControllerYawInput(PlayerRotation);
 
 }
@@ -386,8 +386,8 @@ void APlayer_Archer::LeftThumbStick_Move(const FInputActionValue& value)
 
 	FVector2D InputDirection = value.Get<FVector2D>();
 
-	PlayerDirection.X = InputDirection.Y * 0.5f;
-	PlayerDirection.Y = InputDirection.X * 0.5f;
+	PlayerDirection.X = InputDirection.Y ;
+	PlayerDirection.Y = InputDirection.X ;
 
 }
 
