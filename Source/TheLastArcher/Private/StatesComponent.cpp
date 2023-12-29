@@ -3,6 +3,8 @@
 
 #include "StatesComponent.h"
 
+#include "InterchangeResult.h"
+
 
 UStatesComponent::UStatesComponent()
 {
@@ -42,7 +44,8 @@ void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 	}
 	// 데미지가 들어오면 CurrentHealth에서 데미지 값을 빼라.
 	CurrentHealth = FMath::Clamp(CurrentHealth-Damage,0.0f,MaxHealth);
-	IsDamaged = true;
+	UE_LOG(LogTemp,Warning,TEXT("Damaged!"));
+	
 }
 
 

@@ -95,6 +95,9 @@ protected:
 	virtual void TickDie();
 
 public:
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* MonsterActionMontage;
+
 	UPROPERTY()
 	UMonsterAnim* MonsterAnim;
 
@@ -106,5 +109,5 @@ public:
 	// 죽는 애니메이션
 	void PlayMontageDie();
 	
-
+	void OnchangeMoveState();
 };

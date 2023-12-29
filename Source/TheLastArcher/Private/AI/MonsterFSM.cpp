@@ -192,7 +192,6 @@ void UMonsterFSM::TickDamage()
 			PlayMontageHit();
 			UE_LOG(LogTemp,Warning,TEXT("Hit!"));
 			// 이동상태로 전이 하고싶다.
-			Self->HP->IsDamaged = false;
 			SetState(EMonsterState::Move);
 		}
 	
@@ -218,12 +217,17 @@ void UMonsterFSM::TickDie()
 
 void UMonsterFSM::PlayMontageHit()
 {
-	Self->PlayAnimMontage(MonsterMontage,1,TEXT("Hitted"));
+	Self->PlayAnimMontage(MonsterMontage,1,TEXT("Hit"));
 }
 
 void UMonsterFSM::PlayMontageDie()
 {
 	Self->PlayAnimMontage(MonsterMontage,1,TEXT("Died"));
+}
+
+void UMonsterFSM::OnchangeMoveState()
+{
+	SetState(EMonsterState::Move);
 }
 
 void UMonsterFSM::SetState(EMonsterState Next)
