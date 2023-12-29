@@ -35,15 +35,16 @@ void AMonsterArrowActor::BeginPlay()
 {
 	Super::BeginPlay();
 	CapsuleComp->OnComponentBeginOverlap.AddDynamic(this, &AMonsterArrowActor::OverlapBegin);
-	//P=P0+Vt;
-	float Velocity = Speed * GetWorld()->GetDeltaSeconds();
-	SetActorLocation(GetActorForwardVector()+Velocity);
+	
 }
 
 
 void AMonsterArrowActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//P=P0+Vt;
+	float Velocity = Speed * GetWorld()->GetDeltaSeconds();
+	SetActorLocation(GetActorLocation()+GetActorForwardVector()*Velocity);
 	
 }
 

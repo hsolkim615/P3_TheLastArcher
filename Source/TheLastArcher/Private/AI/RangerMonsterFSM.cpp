@@ -34,7 +34,7 @@ void URangerMonsterFSM::TickAttack()
 	CurrentTime += GetWorld()->GetDeltaSeconds();
 	if(CurrentTime > AttackTime)
 	{
-		MonsterAnim->IsAttack = true;
+		//MonsterAnim->IsAttack = true;
 		CurrentTime = 0;
 		float Dist = FVector::Dist(Self->GetActorLocation(),Target->GetActorLocation());
 		if(Dist>AttackRange)
@@ -46,6 +46,7 @@ void URangerMonsterFSM::TickAttack()
 		{
 			Ai->SetFocus(Target,EAIFocusPriority::Gameplay);
 			SpawnArrow();
+			MonsterAnim->IsAttack = true;
 		}
 	}
 }

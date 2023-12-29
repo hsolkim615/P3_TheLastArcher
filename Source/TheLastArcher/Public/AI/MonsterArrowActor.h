@@ -34,7 +34,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComp;
 
-	float Speed = 800;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float Speed = 30000;
+	
 	float Damage = 10;
 	
 	UFUNCTION()

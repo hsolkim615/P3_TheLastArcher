@@ -28,6 +28,8 @@ class THELASTARCHER_API URangerMonsterFSM : public UMonsterFSM
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="SpawnArrow")
 	TSubclassOf<class AMonsterArrowActor> ArrowClass;
-
+private:
+	UPROPERTY()
+	float RangeAttackTime = 3.0f;
 	
 };
