@@ -14,4 +14,8 @@ class THELASTARCHER_API AArrow_Teleport : public AArrow_Base
 {
 	GENERATED_BODY()
 	
+public:
+	AArrow_Teleport();
+
+
 };
