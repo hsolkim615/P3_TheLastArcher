@@ -85,7 +85,7 @@ bool UMonsterFSM::UpdateRandomLocation(FVector OldLoc, float Radius, FVector& Ne
 
 void UMonsterFSM::TickIdle()
 {
-	UE_LOG(LogTemp,Warning,TEXT("Idle!"))
+	//UE_LOG(LogTemp,Warning,TEXT("Idle!"))
 	// 플레이어를 찾고 싶다, 목적지를 플레이어로 기억하고싶다.
 	Target = Cast<APlayer_Archer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	
@@ -101,7 +101,7 @@ void UMonsterFSM::TickIdle()
 
 void UMonsterFSM::TickMove()
 {
-	UE_LOG(LogTemp,Warning,TEXT("Move!"))
+	//UE_LOG(LogTemp,Warning,TEXT("Move!"))
 	// 목적지를 향해 이동하고싶다.
 	FVector Direction = Target->GetActorLocation() - Self->GetActorLocation();
 	FVector Destination = Target->GetActorLocation();
@@ -153,7 +153,7 @@ void UMonsterFSM::TickMove()
 
 void UMonsterFSM::TickAttack()
 {
-	UE_LOG(LogTemp,Warning,TEXT("UMonsterFSM::TickAttack"));
+	//UE_LOG(LogTemp,Warning,TEXT("UMonsterFSM::TickAttack"));
 	// Attack Wait
 	CurrentTime += GetWorld()->GetDeltaSeconds();
 	// 공격쿨타임이 되면
@@ -175,7 +175,7 @@ void UMonsterFSM::TickAttack()
 		{
 			Ai->SetFocus(Target,EAIFocusPriority::Gameplay);
 			// 공격한다.
-			UE_LOG(LogTemp,Warning,TEXT("Attack!"));
+			//UE_LOG(LogTemp,Warning,TEXT("Attack!"));
 		}
 	}
 }

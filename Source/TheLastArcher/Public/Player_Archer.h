@@ -18,6 +18,8 @@ enum class EArrowType : uint8
 };
 */
 
+class UStatesComponent;
+
 UCLASS()
 class THELASTARCHER_API APlayer_Archer : public ACharacter
 {
@@ -40,8 +42,8 @@ public:
 
 
 public:
-	// »ý¼ºÀÚ ==============
-	// Ä«¸Þ¶ó
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ==============
+	// Ä«ï¿½Þ¶ï¿½
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class UCameraComponent* CameraComp;
 
@@ -49,13 +51,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class UStaticMeshComponent* HmdMesh;
 
-	// ¿À¸¥¼Õ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class UMotionControllerComponent* RightController;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class USkeletalMeshComponent* RightHand;
 
-	// ¿Þ¼Õ
+	// ï¿½Þ¼ï¿½
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class UMotionControllerComponent* LeftController;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
@@ -103,11 +105,11 @@ public:
 	bool bIsNowOverlaping_RightHand_ShotPoint = false;
 
 
-	// »ý¼ºÀÚ ==============
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ==============
 
 
 public: // BindKey
-	// ¿À¸¥¼Õ 
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|BindKey")
 	class UInputAction* IA_RightThumbStick;
 
@@ -119,7 +121,7 @@ public: // BindKey
 
 
 
-	// ¿Þ¼Õ 
+	// ï¿½Þ¼ï¿½ 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|BindKey")
 	class UInputAction* IA_LeftThumbStick;
 
@@ -130,7 +132,7 @@ public: // BindKey
 	class UInputAction* IA_LeftGrip;
 
 public:
-	// ¾ð¸®¾ó¿¡¼­ ½ºÆùÇÒ È­»ì - ÃßÈÄ ¼öÁ¤ ÇÊ¿ä ================
+	// ï¿½ð¸®¾ó¿¡¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ================
 	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
 	TSubclassOf<class AArrow_Base> Factory_NomalArrow;
 
@@ -139,9 +141,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
 	TSubclassOf<class AArrow_Base> Factory_FireArrow;
-	// ¾ð¸®¾ó¿¡¼­ ½ºÆùÇÒ È­»ì - ÃßÈÄ ¼öÁ¤ ÇÊ¿ä ================
+	// ï¿½ð¸®¾ó¿¡¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ================
 
-	// È­»ì ½ºÆùµÉ À§Ä¡ 
+	// È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ 
 	FTransform ArrowSpawnPlace;
 
 
@@ -158,18 +160,18 @@ public:
 
 
 private: // Bind Function
-	// ÇÊ¿äÇÑ º¯¼ö
+	// ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-	// ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿ ¹æÇâ
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
 	FVector PlayerDirection;
 
-	// ÀåÀüµÈ È­»ì º¯¼ö
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	bool bIsLoadArrow = false;
 
-	// ÀåÀü ÁßÀÎ Arrow
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Arrow
 	class AArrow_Base* LoadArrow;
 
-	// ¾ÕÀ¸·Î ³ª°¡´Â È­»ì
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½
 	class AArrow_Base* GoArrow;
 
 	FVector NewArrowPosition;
@@ -180,25 +182,25 @@ private: // Bind Function
 
 
 
-	// ¿À¸¥¼Õ ÀÔ·Â
-	void RightThumbStick_Turn(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î ¿òÁ÷ÀÓ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½
+	void RightThumbStick_Turn(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	void RightTrigger_Attack_Ready(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î °ø°Ý - È­»ì Àâ±â 
-	void RightTrigger_Attack_Shot(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î °ø°Ý - È­»ì ³õ±â
-
-
-	// ¿Þ¼Õ ÀÔ·Â
-	void LeftThumbStick_Move(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î ½Ã¾ß °¢µµ
-
-	void LeftTrigger_LoadArrow(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î È­»ì ÀåÀü
-
-	void LeftGrip_ChangeArrowType(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î È­»ì Á¾·ù ÀüÈ¯
-	void LeftGrip_ChangeArrow_Bool(const FInputActionValue& value); // ÇÃ·¹ÀÌ¾î È­»ì Á¾·ù ÀüÈ¯
+	void RightTrigger_Attack_Ready(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ - È­ï¿½ï¿½ ï¿½ï¿½ï¿½ 
+	void RightTrigger_Attack_Shot(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ - È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
+	// ï¿½Þ¼ï¿½ ï¿½Ô·ï¿½
+	void LeftThumbStick_Move(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+	void LeftTrigger_LoadArrow(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+	void LeftGrip_ChangeArrowType(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+	void LeftGrip_ChangeArrow_Bool(const FInputActionValue& value); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 
 
-public: // È­»ì ½ºÆù ÇÔ¼ö
+
+
+public: // È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void Spawn_NormalArrowFunc();
 
 	void Spawn_TeleportArrowFunc();
@@ -219,8 +221,11 @@ public: // È­»ì ½ºÆù ÇÔ¼ö
 public:
 
 	//===============
-	// ÇÃ·¹ÀÌ¾î Ã¼·Â -> È°¿¡ UI
-	// ³²Àº È­»ì °¹¼ö ->È°¿¡¼­ È­»ì¿¡ UI
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ -> È°ï¿½ï¿½ UI
+	// ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ->È°ï¿½ï¿½ï¿½ï¿½ È­ï¿½ì¿¡ UI
 	float PlayerHP = 100.f;
+
+	UPROPERTY(EditAnywhere)
+	UStatesComponent* StatesComp;
 
 };

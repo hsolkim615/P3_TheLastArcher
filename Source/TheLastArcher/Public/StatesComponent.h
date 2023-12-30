@@ -30,10 +30,10 @@ public:
 	
 	void UpdateHP(float UpdatedHealth);
 	
-	// UFUNCTION(BlueprintCallable)
-	// void TakeDamage( AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage( AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
-	UFUNCTION()
-	void TakeDamage(AActor* DamagedActor,float Damage);
+	// UFUNCTION(BlueprintCallable)
+	// void TakeDamage(AActor* DamagedActor,float Damage);
 	
 };

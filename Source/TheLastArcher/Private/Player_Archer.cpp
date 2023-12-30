@@ -15,6 +15,7 @@
 #include "CableComponent.h"
 #include <../../../../../../../Source/Runtime/Engine/Classes/Components/StaticMeshComponent.h>
 #include <../../../../../../../Source/Runtime/Engine/Classes/Components/SphereComponent.h>
+#include "StatesComponent.h"
 
 // Sets default values
 APlayer_Archer::APlayer_Archer()
@@ -22,23 +23,25 @@ APlayer_Archer::APlayer_Archer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Ä«¸Ş¶ó
+	// ìŠ¤í…Ÿ ì»´í¼ë„ŒíŠ¸ ë¶€ì°©
+	StatesComp = CreateDefaultSubobject<UStatesComponent>("StatesComp");
+	// Ä«ï¿½Ş¶ï¿½
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(RootComponent);
 
-	// Hmd - ±â±â Çìµå 
+	// Hmd - ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
 	HmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hmd Mesh"));
 	HmdMesh->SetupAttachment(CameraComp);
 
 
-	// ¿À¸¥¼Õ================
-	// ¿À¸¥¼Õ ÄÁÆ®·Ñ·¯
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½================
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½
 	RightController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightController"));
 	RightController->SetupAttachment(RootComponent);
 	//RightController->SetRelativeLocation(FVector(30, 40, 0));
-	RightController->SetTrackingMotionSource(FName("Right")); // Æ®·¡Å·¿¡ ÇÊ¿ä
+	RightController->SetTrackingMotionSource(FName("Right")); // Æ®ï¿½ï¿½Å·ï¿½ï¿½ ï¿½Ê¿ï¿½
 
-	// ¿À¸¥¼Õ ¿ÜÇü
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	RightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("RightHand"));
 	RightHand->SetupAttachment(RightController);
 	RightHand->SetRelativeRotation(FRotator(0, 0, 90));
@@ -48,17 +51,17 @@ APlayer_Archer::APlayer_Archer()
 	if (RightHandMesh.Succeeded()) {
 		RightHand->SetSkeletalMesh(RightHandMesh.Object);
 	}
-	// ¿À¸¥¼Õ================
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½================
 
 
-	// ¿Ş¼Õ==============
-	// ¿Ş¼Õ ÄÁÆ®·Ñ·¯
+	// ï¿½Ş¼ï¿½==============
+	// ï¿½Ş¼ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½
 	LeftController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftController"));
 	LeftController->SetupAttachment(RootComponent);
 	//LeftController->SetRelativeLocation(FVector(30, -40, 0));
-	LeftController->SetTrackingMotionSource(FName("Left"));// Æ®·¡Å·¿¡ ÇÊ¿ä
+	LeftController->SetTrackingMotionSource(FName("Left"));// Æ®ï¿½ï¿½Å·ï¿½ï¿½ ï¿½Ê¿ï¿½
 
-	// ¿Ş¼Õ ¿ÜÇü
+	// ï¿½Ş¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 	LeftHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("LeftHand"));
 	LeftHand->SetupAttachment(LeftController);
 	LeftHand->SetRelativeRotation(FRotator(0, -180, 90));
@@ -68,7 +71,7 @@ APlayer_Archer::APlayer_Archer()
 	if (LeftHandMesh.Succeeded()) {
 		LeftHand->SetSkeletalMesh(LeftHandMesh.Object);
 	}
-	// ¿Ş¼Õ==============
+	// ï¿½Ş¼ï¿½==============
 
 
 	// È°===========
@@ -99,20 +102,20 @@ APlayer_Archer::APlayer_Archer()
 	}
 	*/
 
-	// È°½ÃÀ§
+	// È°ï¿½ï¿½ï¿½ï¿½
 	UpBowString = CreateDefaultSubobject<UCableComponent>(TEXT("UpBowString"));
 	UpBowString->SetupAttachment(BowMeshComp);
 	UpBowString->SetRelativeLocation(FVector(-5, 0, 30));
-	UpBowString->NumSegments = 1; // cableÀÇ Ãâ··ÀÌ´Â ¿òÁ÷ÀÓ ¾ø¾Ö±â
-	UpBowString->CableLength = 10.f; // cableÀÇ ±æÀÌ
-	UpBowString->EndLocation = FVector(0); // cableÀÇ endÀÇ À§Ä¡°ª
+	UpBowString->NumSegments = 1; // cableï¿½ï¿½ ï¿½â··ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½
+	UpBowString->CableLength = 10.f; // cableï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	UpBowString->EndLocation = FVector(0); // cableï¿½ï¿½ endï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½
 
 	DownBowString = CreateDefaultSubobject<UCableComponent>(TEXT("DownBowString"));
 	DownBowString->SetupAttachment(BowMeshComp);
 	DownBowString->SetRelativeLocation(FVector(-4, 0, -30));
-	DownBowString->NumSegments = 1; // cableÀÇ Ãâ··ÀÌ´Â ¿òÁ÷ÀÓ ¾ø¾Ö±â
-	DownBowString->CableLength = 10.f; // cableÀÇ ±æÀÌ
-	DownBowString->EndLocation = FVector(0); // cableÀÇ endÀÇ À§Ä¡°ª
+	DownBowString->NumSegments = 1; // cableï¿½ï¿½ ï¿½â··ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½
+	DownBowString->CableLength = 10.f; // cableï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	DownBowString->EndLocation = FVector(0); // cableï¿½ï¿½ endï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½
 
 
 	// È°===========
@@ -121,13 +124,13 @@ APlayer_Archer::APlayer_Archer()
 
 
 	// collision =========================
-	// È° ½ÃÀ§ collision 
+	// È° ï¿½ï¿½ï¿½ï¿½ collision 
 	BowStringCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BowStringComllision"));
 	BowStringCollision->SetupAttachment(BowStringPlace);
 	BowStringCollision->SetRelativeScale3D(FVector(0.15f));
 
 
-	// ¿À¸¥ÂÊ ¾î±ú collision
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ collision
 	CanShotPlaceCollision = CreateDefaultSubobject<USphereComponent>(TEXT("CanShotPlaceCollision"));
 	CanShotPlaceCollision->SetupAttachment(BowMeshComp);
 	CanShotPlaceCollision->SetRelativeLocation(FVector(-45, 0, 0));
@@ -135,7 +138,7 @@ APlayer_Archer::APlayer_Archer()
 
 
 
-	// ¿À¸¥¼Õ collision
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ collision
 	RightFingerCollision = CreateDefaultSubobject<USphereComponent>(TEXT("RightFingerCollision"));
 	RightFingerCollision->SetupAttachment(RightHand);
 	RightFingerCollision->SetRelativeLocation(FVector(0.6f, 12, -2.5));
@@ -147,7 +150,7 @@ APlayer_Archer::APlayer_Archer()
 
 
 	/* *********************
-	// ½ºÆùµÉ È­»ìÀÇ Á¾·ù ÃÊ±âÈ­ - Normal
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ - Normal
 	CurrentArrowType = EArrowType::NormalArrow;
 	*/
 
@@ -166,7 +169,7 @@ void APlayer_Archer::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("Start Log ======================================================"));
 
-	// Æ®·¡Å· ¼³Á¤===============
+	// Æ®ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½===============
 	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
 
 	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController()) {
@@ -178,36 +181,36 @@ void APlayer_Archer::BeginPlay()
 
 		}
 	}
-	// Æ®·¡Å· ¼³Á¤===============
+	// Æ®ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½===============
 
 
 
 
 
-	// È­»ì °ü·Ã ========================
+	// È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ========================
 
-	// ½ºÆùÇÒ ¼ö ÀÖ´Â È­»ì Á¾·ù ÃÊ±âÈ­
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 	Choose_Normal = true;
 
-	// È­»ì ½ºÆùµÉ À§Ä¡ - ¹Ù²ã¾ß µÊ
+	// È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ - ï¿½Ù²ï¿½ï¿½ ï¿½ï¿½
 	//ArrowSpawnPlace = BowMeshComp->GetBoneTransform(TEXT("bowstring"));
 	ArrowSpawnPlace = BowMeshComp->GetRelativeTransform();
 
-	// È­»ì °ü·Ã ========================
+	// È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ========================
 
 
 
 
 
 
-	// È° °ü·Ã =======================================
-	// CableComponent¸¦ ¿òÁ÷ÀÏ ¼ö ÀÖµµ·Ï ÁØºñÇÑ Mesh¿¡ attach -> BowStringPlace¸¦ ¿òÁ÷ÀÓÀ¸·Î½á È° ½ÃÀ§°¡ ´ç°ÜÁö´Â ¸ğ½À ¿¬Ãâ °¡´É
+	// È° ï¿½ï¿½ï¿½ï¿½ =======================================
+	// CableComponentï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ ï¿½Øºï¿½ï¿½ï¿½ Meshï¿½ï¿½ attach -> BowStringPlaceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î½ï¿½ È° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UpBowString->SetAttachEndToComponent(BowStringPlace);
 	DownBowString->SetAttachEndToComponent(BowStringPlace);
 
 
 
-	// È° °ü·Ã =======================================
+	// È° ï¿½ï¿½ï¿½ï¿½ =======================================
 
 
 
@@ -220,7 +223,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 
 
-	// Player ÀÌµ¿================================
+	// Player ï¿½Ìµï¿½================================
 	PlayerDirection.Normalize();
 
 	FTransform ControllerTransform = FTransform(this->GetControlRotation());
@@ -230,14 +233,14 @@ void APlayer_Archer::Tick(float DeltaTime)
 	this->AddMovementInput(dir * 0.5f);
 
 	PlayerDirection = FVector::ZeroVector;
-	// Player ÀÌµ¿================================
+	// Player ï¿½Ìµï¿½================================
 
 
 	/*
 	FVector ForwardVector = CameraComp->GetForwardVector();
 	FRotator LookAtRotation = FRotationMatrix::MakeFromX(ForwardVector).Rotator();
 
-	// ÇÃ·¹ÀÌ¾îÀÇ yaw¸¦ »õ·Î ¾ò¾î¿Â ½Ã¾ß °¢µµ·Î ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ yawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Õ´Ï´ï¿½.
 	SetActorRotation(FRotator(0, LookAtRotation.Yaw, 0));
 	*/
 
@@ -246,52 +249,52 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 }
 
-// ÇÃ·¹ÀÌ¾î Á¶ÀÛ Å° ¹ÙÀÎµù
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ Å° ï¿½ï¿½ï¿½Îµï¿½
 void APlayer_Archer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// PlayerInputComponent Çüº¯È¯
+	// PlayerInputComponent ï¿½ï¿½ï¿½ï¿½È¯
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
 
 	if (EnhancedInputComponent) {
-		// *****ÇÃ·¹ÀÌ¾î Á¶ÀÛ Å° ¹ÙÀÎµù ±¸Çö
-		// ¿À¸¥¼Õ - ½ºÆ½* / ±×¸³* / Æ®¸®°Å* / A / B
-		// ¿Ş¼Õ - ½ºÆ½* / ±×¸³* / Æ®¸®°Å* / X / Y
+		// *****ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ Å° ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½Æ½* / ï¿½×¸ï¿½* / Æ®ï¿½ï¿½ï¿½ï¿½* / A / B
+		// ï¿½Ş¼ï¿½ - ï¿½ï¿½Æ½* / ï¿½×¸ï¿½* / Æ®ï¿½ï¿½ï¿½ï¿½* / X / Y
 
 
 
-		// ÇÃ·¹ÀÌ¾î ÀÌµ¿ - ¿Ş¼Õ ½ºÆ½*
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½ - ï¿½Ş¼ï¿½ ï¿½ï¿½Æ½*
 		EnhancedInputComponent->BindAction(IA_LeftThumbStick, ETriggerEvent::Triggered, this, &APlayer_Archer::LeftThumbStick_Move);
 
-		// ÇÃ·¹ÀÌ¾î ½Ã¾ß ÁÂ¿ì ÀÌµ¿ - ¿À¸¥¼Õ ½ºÆ½* 
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ã¾ï¿½ ï¿½Â¿ï¿½ ï¿½Ìµï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ½* 
 		EnhancedInputComponent->BindAction(IA_RightThumbStick, ETriggerEvent::Triggered, this, &APlayer_Archer::RightThumbStick_Turn);
 
-		// ÇÃ·¹ÀÌ¾î Àü¹æÀ¸·Î ºü¸¥ ÀÌµ¿
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
 
-		// ÇÃ·¹ÀÌ¾î È­»ì ÀåÀü - ¿Ş¼Õ Æ®¸®°Å*
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½Ş¼ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½*
 		EnhancedInputComponent->BindAction(IA_LeftTrigger, ETriggerEvent::Triggered, this, &APlayer_Archer::LeftTrigger_LoadArrow);
 
 
-		// ÇÃ·¹ÀÌ¾î °ø°İ - È° ½ÃÀ§ Àâ±â, ³õ±â - ¿À¸¥¼Õ Æ®¸®°Å*
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ - È° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½*
 		EnhancedInputComponent->BindAction(IA_RightTrigger, ETriggerEvent::Triggered, this, &APlayer_Archer::RightTrigger_Attack_Ready);
 		EnhancedInputComponent->BindAction(IA_RightTrigger, ETriggerEvent::Completed, this, &APlayer_Archer::RightTrigger_Attack_Shot);
 
 
-		// ÇÃ·¹ÀÌ¾î È­»ì Á¾·ù ÀüÈ¯ - ¿Ş¼Õ ±×¸³*
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ - ï¿½Ş¼ï¿½ ï¿½×¸ï¿½*
 		EnhancedInputComponent->BindAction(IA_LeftGrip, ETriggerEvent::Triggered, this, &APlayer_Archer::LeftGrip_ChangeArrowType);
 		EnhancedInputComponent->BindAction(IA_LeftGrip, ETriggerEvent::Completed, this, &APlayer_Archer::LeftGrip_ChangeArrow_Bool);
 
 
-		// ÇÃ·¹ÀÌ¾î È° ÀÎº¥Åä¸® ¿­±â/´İ±â
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È° ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½/ï¿½İ±ï¿½
 
-		// ÇÃ·¹ÀÌ¾î ¾ÆÀÌÅÛ Àâ±â - ¿À¸¥¼Õ ±×¸³*
-
-
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½*
 
 
-		// ÀÏ½ÃÁ¤Áö
+
+
+		// ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½
 	}
 }
 
@@ -299,8 +302,8 @@ void APlayer_Archer::RightThumbStick_Turn(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Stick"));
 
-	// ÇÃ·¹ÀÌ¾îÀÇ ½Ã¾ß°¢µµ¸¦ µÎ °¡Áö·Î ¼³Á¤ÇØ¾ß ÇÔ
-	// ¿ì¼±¼øÀ§ 1Àº Á¶ÀÌ½ºÆ½, ¿ì¼±¼øÀ§ 2´Â Ä«¸Ş¶óÀÇ Rotation ¿òÁ÷ÀÓ
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Ã¾ß°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½
+	// ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½Æ½, ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ Ä«ï¿½Ş¶ï¿½ï¿½ï¿½ Rotation ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 	float PlayerRotation = 0.3f * value.Get<float>();
@@ -317,17 +320,17 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 
 	if (BowStringCollision->IsOverlappingComponent(RightFingerCollision) == true) {
-		// È° ½ÃÀ§ÀÇ À§Ä¡¸¦ ¿À¸¥¼ÕÀÇ ¼ÒÄÏ°ú °°°Ô ¼¼ÆÃ - LoadArrow´Â È° ½ÃÀ§¿¡ ºÙ¾î ÀÖÀ¸¹Ç·Î, µû¶ó°¨
-		// x°ª À§Ä¡ Á¶Á¤ ÇÊ¿ä
+		// È° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - LoadArrowï¿½ï¿½ È° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½, ï¿½ï¿½ï¿½ï¿½
+		// xï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 		BowStringPlace->SetRelativeLocation(FVector(RightController->GetRelativeLocation().X - 30.f, BowStringPlace->GetRelativeLocation().Y, BowStringPlace->GetRelativeLocation().Z));
 
 
-		// È­»ì ³¯¾Æ°¡´Â °¡ÀÌµå ¶óÀÎ
+		// È­ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (LoadArrow) {
-			// ½ÃÀÛÁ¡ + ¹æÇâ + ¶óÀÎÀÇ ±æÀÌ
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			FVector EndLocation = LoadArrow->GetActorLocation() + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())).GetSafeNormal() * 2000.0f;
 
-			// ¶óÀÎÈ£Ãâ ±â´É
+			// ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½
 			DrawDebugLine(GetWorld(), BowStringPlace->GetComponentLocation(), EndLocation, FColor::Green, false, -1, 0, 2.0f);
 		}
 
@@ -348,7 +351,7 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 
 
 
-		// ¿À¸¥¼Õ collision°ú shot collisionÀÌ overlap ÁßÀÎ °æ¿ì - if¹®
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ collisionï¿½ï¿½ shot collisionï¿½ï¿½ overlap ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ - ifï¿½ï¿½
 
 		if (LoadArrow) {
 			GoArrow = LoadArrow;
@@ -358,20 +361,20 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 		}
 
 		// ===============
-		FVector BowMeshLocation = BowMeshComp->GetComponentLocation(); // È°ÀÇ À§Ä¡
-		FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // È° ½ÃÀ§ÀÇ À§Ä¡
+		FVector BowMeshLocation = BowMeshComp->GetComponentLocation(); // È°ï¿½ï¿½ ï¿½ï¿½Ä¡
+		FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // È° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
 
 		if (GoArrow) {
-			// È­»ìÀÌ ³¯¾Æ°¡´Â ¹æÇâ
+			// È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
 
-			// AArrow_BaseÅ¬·¡½º¿¡¼­ tickÀ¸·Î È­»ìÀ» ³¯¸®µµ·Ï, AArrow_BaseÀÇ boolº¯¼ö¸¦ true·Î ÇÔ
+			// AArrow_BaseÅ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ tickï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, AArrow_Baseï¿½ï¿½ boolï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½
 			GoArrow->bIsShotArrow = true;
 
-			// ¹ß»çµÈ È­»ìÀº 10ÃÊ µÚ¿¡ »ç¶óÁü
+			// ï¿½ß»ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ 10ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 			GoArrow->SetLifeSpan(10.f);
 
-			// È­»ì ÀçÀåÀü °¡´ÉÇÏµµ·Ï
+			// È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½
 			bIsLoadArrow = false;
 
 		}
@@ -398,7 +401,7 @@ void APlayer_Archer::LeftTrigger_LoadArrow(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Left Trigger"));
 
-	// ¸¸¾à È° ½ÃÀ§¿¡ È­»ìÀÌ ¾ø´Ù¸é, È­»ìÀ» ½ºÆù / ÀÖÀ¸¸é ¾Æ¹«ÀÏµµ ¾øÀ½
+	// ï¿½ï¿½ï¿½ï¿½ È° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½, È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¹ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	if (bIsLoadArrow == false) {
 
@@ -447,7 +450,7 @@ void APlayer_Archer::LeftGrip_ChangeArrowType(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Left Grip_Pressed"));
 
-	// ÇÔ¼ö ¹İº¹ ¾ÈµÇµµ·Ï bool°ª Ãß°¡ ÇÊ¿ä 
+	// ï¿½Ô¼ï¿½ ï¿½İºï¿½ ï¿½ÈµÇµï¿½ï¿½ï¿½ boolï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ê¿ï¿½ 
 
 
 	/* ****************************
@@ -455,12 +458,12 @@ void APlayer_Archer::LeftGrip_ChangeArrowType(const FInputActionValue& value)
 
 	if (NextTypeValue >= static_cast<int32>(EArrowType::ReturnFNormal))
 	{
-		// EnumÀÇ ¸¶Áö¸· °ªº¸´Ù Å©°Å³ª °°À¸¸é ´Ù½Ã NormalArrow·Î ¼øÈ¯
+		// Enumï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ NormalArrowï¿½ï¿½ ï¿½ï¿½È¯
 		CurrentArrowType = EArrowType::NormalArrow;
 	}
 	else
 	{
-		// ´ÙÀ½ Enum °ª ¹İÈ¯
+		// ï¿½ï¿½ï¿½ï¿½ Enum ï¿½ï¿½ ï¿½ï¿½È¯
 		CurrentArrowType = static_cast<EArrowType>(NextTypeValue);
 	}
 	*/
@@ -516,15 +519,15 @@ void APlayer_Archer::LeftGrip_ChangeArrow_Bool(const FInputActionValue& value)
 }
 
 
-// ½ºÆùµÉ È­»ì Á¾·ù ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void APlayer_Archer::Spawn_NormalArrowFunc()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Normal"));
 
-	// È­»ì ½ºÆù
+	// È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	LoadArrow = GetWorld()->SpawnActor<AArrow_Base>(Factory_NomalArrow, ArrowSpawnPlace);
 
-	// È­»ì À§Ä¡ ¼¼ÆÃ
+	// È­ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
 	SetLoadArrow_Load();
 }
 
@@ -548,7 +551,7 @@ void APlayer_Archer::Spawn_FireArrowFunc()
 
 void APlayer_Archer::SetLoadArrow_Load()
 {
-	// ½ºÆùµÈ È­»ì ¼³Á¤
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (LoadArrow) {
 		LoadArrow->AttachToComponent(BowStringPlace, FAttachmentTransformRules::KeepRelativeTransform);
 		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
@@ -562,7 +565,7 @@ void APlayer_Archer::SetLoadArrow_Load()
 	}
 }
 
-// ÀÌ ÇÔ¼ö ÇÊ¿ä ¾øÀ½
+// ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½
 void APlayer_Archer::SetLoadArrow_Ready()
 {
 
