@@ -9,7 +9,7 @@
 
 /* ***************
 UENUM(BlueprintType)
-enum class EArrowType : uint8 
+enum class EArrowType : uint8
 {
 	NormalArrow,
 	TeleportArrow,
@@ -72,11 +72,11 @@ public:
 	class USkeletalMeshComponent* BowMeshComp;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components") 
-	class UStaticMeshComponent* BowStringPlace;	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
+	class UStaticMeshComponent* BowStringPlace;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components") 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|Components")
 	class UCableComponent* UpBowString;
 	//TObjectPtr<class UCableComponent> UPBowString;
 
@@ -136,14 +136,14 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
 	TSubclassOf<class AArrow_Base> Factory_TeleportArrow;
-	
+
 	UPROPERTY(EditAnywhere, Category = Spawn_ArrowType)
 	TSubclassOf<class AArrow_Base> Factory_FireArrow;
 	// 언리얼에서 스폰할 화살 - 추후 수정 필요 ================
 
 	// 화살 스폰될 위치 
 	FTransform ArrowSpawnPlace;
-	
+
 
 
 
@@ -154,7 +154,7 @@ public:
 	bool GetItemFire = false;
 
 
-	
+
 
 
 private: // Bind Function
@@ -173,9 +173,6 @@ private: // Bind Function
 	class AArrow_Base* GoArrow;
 
 	FVector NewArrowPosition;
-
-	// 공격 준비 상태로 bool변수 false로 전환
-	bool CatchString_ReadyAttack = false;
 
 
 	bool bIsChangeArrow = true;
@@ -214,6 +211,9 @@ public: // 화살 스폰 함수
 	void SetLoadArrow_Load();
 
 	void SetLoadArrow_Ready();
+
+
+
 
 
 public:
