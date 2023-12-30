@@ -21,6 +21,10 @@ class THELASTARCHER_API URangerMonsterFSM : public UMonsterFSM
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	virtual void TickAttack() override;
+
+	virtual void PlayMontageHit() override;
+
+	virtual void PlayMontageDie() override;
 	
 	
 	void SpawnArrow();

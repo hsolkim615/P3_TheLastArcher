@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
+class UWidgetComponent;
+class UMonsterSwordComponent;
 class URangerMonsterFSM;
 class UStatesComponent;
 class UNavigationInvokerComponent;
@@ -20,6 +22,7 @@ class THELASTARCHER_API AMonsterBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMonsterBase();
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,17 +33,26 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TSubclassOf<UMonsterFSM> MonsterFsmClass;
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UMonsterFSM* MonsterFsm;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UWidgetComponent* HPComp;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UStatesComponent* HP;
 
 	UPROPERTY(EditAnywhere)
 	UArrowComponent* ArrowComp;
-	
-	
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	USkeletalMeshComponent* Weapon;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UCapsuleComponent* WeaponCapsuleComp;
 	
 };

@@ -93,21 +93,23 @@ protected:
 	virtual void TickAttack();
 	virtual void TickDamage();
 	virtual void TickDie();
-
+//================================================================================================================
 public:
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* MonsterActionMontage;
-
+	// 상태가 바뀔 때 애니메이션의 상태도 바꾸고싶다.
+	// 생성자에서 직접 ABP_Monster를 로드하고싶다.
+	
 	UPROPERTY()
 	UMonsterAnim* MonsterAnim;
-
+	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* MonsterMontage;
 
 	// 맞는 애니메이션
-	void PlayMontageHit();
+	virtual void PlayMontageHit();
 	// 죽는 애니메이션
-	void PlayMontageDie();
+	virtual void PlayMontageDie();
 	
 	void OnchangeMoveState();
+//================================================================================================================
+
 };

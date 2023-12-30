@@ -183,7 +183,6 @@ void UMonsterFSM::TickAttack()
 void UMonsterFSM::TickDamage()
 {
 	
-	
 		CurrentTime += GetWorld()->GetDeltaSeconds();
 		// 2초동안 대기 했다가
 		if(CurrentTime > DamageTime)

@@ -25,8 +25,8 @@ AMonsterArrowActor::AMonsterArrowActor()
 	Arrow->SetupAttachment(CapsuleComp);
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComp");
-	ProjectileMovementComp->InitialSpeed = 5000;
-	ProjectileMovementComp->MaxSpeed = 5000;
+	ProjectileMovementComp->InitialSpeed = 8000;
+	ProjectileMovementComp->MaxSpeed = 8000;
 }
 
 
@@ -51,10 +51,12 @@ void AMonsterArrowActor::OverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 {
 	UE_LOG(LogTemp, Warning, TEXT("11111111111111111111111!"));
 	{
-		if (OtherComp->IsA<AMonsterArrowActor>())
+		if (OtherActor->IsA<APlayer_Archer>())
 		{
-			auto* Target = Cast<UStatesComponent>(OtherActor);
-			//Target->TakeDamage(Damage,,nullptr,this);
+			UE_LOG(LogTemp,Warning,TEXT("22222222222222222222222222!"));
+
+			auto Target = Cast<APlayer_Archer>(OtherActor);
+			UE_LOG(LogTemp,Warning,TEXT("Hit231321321313212131231231231231232131"));
 		}
 
 	}

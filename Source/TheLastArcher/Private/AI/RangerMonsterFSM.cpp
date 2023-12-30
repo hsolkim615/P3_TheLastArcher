@@ -51,6 +51,16 @@ void URangerMonsterFSM::TickAttack()
 	}
 }
 
+void URangerMonsterFSM::PlayMontageHit()
+{
+	Self->PlayAnimMontage(MonsterMontage,1,"RangerHit");
+}
+
+void URangerMonsterFSM::PlayMontageDie()
+{
+	Self->PlayAnimMontage(MonsterMontage,1,"RangerDie");
+}
+
 void URangerMonsterFSM::SpawnArrow()
 {
 	//UE_LOG()

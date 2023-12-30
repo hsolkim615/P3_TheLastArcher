@@ -24,6 +24,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool IsDieDone;
 
+	
 	// UFUNCTION()
 	// void PlayMontageDamage(FName SectionName);
 	//

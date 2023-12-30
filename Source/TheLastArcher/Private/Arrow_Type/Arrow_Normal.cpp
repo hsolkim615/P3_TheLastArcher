@@ -32,7 +32,7 @@ void AArrow_Normal::NotifyActorBeginOverlap(AActor* OtherActor)
 		UE_LOG(LogTemp, Warning, TEXT("Hit Monster"));
 		HitMonster = Cast<AMonsterBase>(OtherActor);
 
-		HitMonster->MonsterHP -= Damage;
+		//HitMonster->MonsterHP -= Damage;
 		/*
 		const UNormalArrow_Type* NormalArrow_Type = NewObject<UNormalArrow_Type>();
 
