@@ -553,8 +553,8 @@ void APlayer_Archer::SetLoadArrow_Load()
 		LoadArrow->AttachToComponent(BowStringPlace, FAttachmentTransformRules::KeepRelativeTransform);
 		//LoadArrow->SetActorTransform(BowMeshComp->GetBoneTransform(TEXT("bowstring")));
 
-		LoadArrow->SetActorRelativeLocation(FVector(65, 0.5f, 0));
-		LoadArrow->SetActorRelativeRotation(FRotator(67, 137, 146));
+		LoadArrow->SetActorRelativeLocation(FVector(65, 0.2f, 0));
+		LoadArrow->SetActorRelativeRotation(FRotator(68, 135, 144.5f));
 		LoadArrow->SetActorRelativeScale3D(FVector(1));
 
 
