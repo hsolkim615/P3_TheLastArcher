@@ -35,6 +35,8 @@ void UStatesComponent::BeginPlay()
 		// 데미지 받는 함수를 바인딩하자.(델리게이트)
 		// 호출되면 함수 실행이된다.
 		//Owner->OnTakeAnyDamage.AddDynamic(this,&UStatesComponent::TakeDamage);
+
+		
 	}
 }
 
@@ -43,6 +45,33 @@ void UStatesComponent::UpdateHP(float UpdatedHealth)
 	CurrentHealth = FMath::Max(0,CurrentHealth+UpdatedHealth);
 	
 }
+
+void UStatesComponent::TakeDamage(AActor* DamagedActor, float Damage)
+{
+	UpdateHP(-Damage);
+
+	if(DamagedActor -> IsA<AMonsterBase>())
+	{
+		AMonsterBase* Monster =Cast<AMonsterBase>(DamagedActor);
+		if(CurrentHealth > 0)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("MonsterHIt@@@@@@@@@@@@@@@@@@@@@@@@@@"))
+			Monster->MonsterFsm->SetState(EMonsterState::Damage);
+			Monster->MonsterFsm->PlayMontageHit();
+		}
+		else
+		{
+			Monster->MonsterFsm->SetState(EMonsterState::Die);
+			Monster->MonsterFsm->PlayMontageDie();
+		}
+	}
+	else
+	{
+		// 플레이어
+		UE_LOG(LogTemp,Warning,TEXT("PlayerHIt11111111111111111111111111111"));
+	}
+}
+
 
 // void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 //                                    const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
@@ -78,6 +107,8 @@ void UStatesComponent::UpdateHP(float UpdatedHealth)
 // 	}
 // 	
 // }
+
+
 
 
 

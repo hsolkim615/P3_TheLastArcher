@@ -13,11 +13,11 @@ class THELASTARCHER_API UStatesComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	
 	UStatesComponent();
 
 protected:
-	// Called when the game starts
+	
 	virtual void BeginPlay() override;
 
 public:	
@@ -27,18 +27,13 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float CurrentHealth;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	bool IsDamaged = false;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	bool IsDied = false;
-
+	
 	void UpdateHP(float UpdatedHealth);
 	
 	// UFUNCTION(BlueprintCallable)
 	// void TakeDamage( AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
-
+	UFUNCTION()
+	void TakeDamage(AActor* DamagedActor,float Damage);
 	
 };

@@ -3,16 +3,17 @@
 
 #include "MonsterBase.h"
 
-#include "NavigationInvokerComponent.h"
+
 #include "AI/MonsterAnim.h"
 #include "AI/MonsterFSM.h"
 #include "StatesComponent.h"
-#include "AI/RangerMonsterFSM.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
-#include "Engine/DamageEvents.h"
+#include "EntitySystem/MovieSceneEntitySystemRunner.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -70,7 +71,7 @@ AMonsterBase::AMonsterBase()
 	{
 		HPComp->SetWidgetClass(WidgetTemp.Class);
 		HPComp->SetDrawSize(FVector2D(150,20));
-		HPComp->SetRelativeLocation(FVector(0,0,100));
+		HPComp->SetRelativeLocation(FVector(0,0,120));
 		HPComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 //=======================================================================================================================================
@@ -89,18 +90,23 @@ AMonsterBase::AMonsterBase()
 
 
 
-// Called when the game starts or when spawned
+
 void AMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
+
 void AMonsterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	// HPUI 빌보드 처리
+	FVector Start = HPComp->GetComponentLocation();
+	FVector Target = UGameplayStatics::GetPlayerCameraManager(GetWorld(),0)->GetCameraLocation();
+	FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(Start,Target);
+	HPComp->SetWorldRotation(NewRotation);
 
 }
 
