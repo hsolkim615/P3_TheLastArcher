@@ -3,6 +3,8 @@
 
 #include "Arrow_Base.h"
 #include "Components/CapsuleComponent.h"
+#include <../../../../../../../Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+#include "Player_Archer.h"
 
 // Sets default values
 AArrow_Base::AArrow_Base()
@@ -31,7 +33,8 @@ AArrow_Base::AArrow_Base()
 
 	}
 
-
+	// 플레이어 저장
+	Player_Archer = Cast<APlayer_Archer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
 // Called when the game starts or when spawned
