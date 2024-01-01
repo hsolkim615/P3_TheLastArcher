@@ -19,7 +19,9 @@ public:
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-private:
 	UPROPERTY(EditAnywhere, Meta = (AllowPrivateAccess))
 	float Damage;
+
+
+
 };

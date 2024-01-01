@@ -21,8 +21,13 @@ public:
 
 	FVector ArrowDirection = GetActorForwardVector();
 
+	// 화살 날아가는 방향
 	FVector ArrowGoingDirection;
 
+	// 플레이어 저장할 변수
+	class APlayer_Archer* Player_Archer;
+
+	// 부딪힌 몬스터 저장할 변수
 	class AMonsterBase* HitMonster;
 
 protected:

@@ -17,5 +17,6 @@ class THELASTARCHER_API AArrow_Teleport : public AArrow_Base
 public:
 	AArrow_Teleport();
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 };

@@ -13,8 +13,8 @@
 #include "Arrow_Type/Arrow_Teleport.h"
 #include "Arrow_Type/Arrow_Fire.h"
 #include "CableComponent.h"
-#include <../../../../../../../Source/Runtime/Engine/Classes/Components/StaticMeshComponent.h>
-#include <../../../../../../../Source/Runtime/Engine/Classes/Components/SphereComponent.h>
+#include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include "StatesComponent.h"
 
 // Sets default values
@@ -246,6 +246,16 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 
 
+	//
+	if (CameraComp->GetRelativeRotation().Yaw != 0.f) {
+
+		//this->SetActorRotation(FRotator(this->GetActorRotation().Pitch, (this->GetActorRotation().Yaw + CameraComp->GetRelativeRotation().Yaw), this->GetActorRotation().Roll));
+
+		//AddControllerYawInput(this->GetActorRotation().Yaw + CameraComp->GetRelativeRotation().Yaw);
+
+
+		CameraComp->SetRelativeRotation(FRotator(0));
+	}
 
 }
 
