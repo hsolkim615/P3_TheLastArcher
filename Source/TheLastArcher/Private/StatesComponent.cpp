@@ -3,6 +3,7 @@
 
 #include "StatesComponent.h"
 
+#include "AIController.h"
 #include "InterchangeResult.h"
 #include "MonsterBase.h"
 #include "AI/MonsterFSM.h"
@@ -16,7 +17,7 @@ UStatesComponent::UStatesComponent()
 	MaxHealth = 100;
 	CurrentHealth = MaxHealth;
 
-	UpdateHP(MaxHealth);
+	//UpdateHP(MaxHealth);
 
 	
 }
@@ -92,6 +93,7 @@ void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 		// 대상이 몬스터인데 현제 체력이 0 보다 크면 살아있으므로
 		if(CurrentHealth > 0)
 		{
+			Monster->MonsterFsm->Ai->StopMovement();
 			// 데미지 받은 상태로 전환
 			Monster->MonsterFsm->SetState(EMonsterState::Damage);
 			Monster->MonsterFsm->PlayMontageHit();

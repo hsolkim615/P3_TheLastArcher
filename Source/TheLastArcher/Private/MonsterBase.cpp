@@ -26,7 +26,7 @@ AMonsterBase::AMonsterBase()
 //=======================================================================================================================================
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
-	Weapon ->SetupAttachment(GetMesh(),("WeaponSocket"));
+	Weapon -> SetupAttachment(GetMesh(),("WeaponSocket"));
 	Weapon -> SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempWeapon(TEXT("/Script/Engine.SkeletalMesh'/Game/Resource/Sword/Viking_Sword.Viking_Sword'"));
 	if(TempWeapon.Succeeded())
@@ -94,6 +94,7 @@ AMonsterBase::AMonsterBase()
 void AMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
+	// HPComp->GetWidget()->AddToViewport();
 	
 }
 

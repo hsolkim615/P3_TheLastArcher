@@ -25,16 +25,18 @@ public:
 	bool IsDieDone;
 
 	
-	// UFUNCTION()
-	// void PlayMontageDamage(FName SectionName);
-	//
-	// UFUNCTION(BlueprintCallable)
-	// void OnDamageEnd();
-	// UFUNCTION(BlueprintCallable)
-	// void AnimNotify_DamgeEnd();
-	//
-	// UFUNCTION(BlueprintCallable)
-	// void AnimNotify_DieEnd();
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayMontageDamage(FName SectionName);
+	
+	UFUNCTION(BlueprintCallable)
+	void OnDamageEnd();
+
+	UFUNCTION(BlueprintCallable)
+	void AnimNotify_DamageEnd();
+	
+	UFUNCTION(BlueprintCallable)
+	void AnimNotify_DieEnd();
+
 	// UFUNCTION(BlueprintCallable)
 	// void AnimNotify_OnAttackHit();
 };

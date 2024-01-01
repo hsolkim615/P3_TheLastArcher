@@ -183,25 +183,27 @@ void UMonsterFSM::TickAttack()
 void UMonsterFSM::TickDamage()
 {
 	
-		CurrentTime += GetWorld()->GetDeltaSeconds();
-		// 2초동안 대기 했다가
-		if(CurrentTime > DamageTime)
-		{
-			// 맞는 애니메이션을 하고
-			PlayMontageHit();
-			UE_LOG(LogTemp,Warning,TEXT("Hit!"));
-			// 이동상태로 전이 하고싶다.
-			SetState(EMonsterState::Move);
-		}
-	
+		// CurrentTime += GetWorld()->GetDeltaSeconds();
+		// // 2초동안 대기 했다가
+		// if(CurrentTime > DamageTime)
+		// {
+		// 	// 맞는 애니메이션을 하고
+		// 	PlayMontageHit();
+		// 	UE_LOG(LogTemp,Warning,TEXT("Hit!"));
+		// 	// 이동상태로 전이 하고싶다.
+		// 	SetState(EMonsterState::Move);
+		// }
 	
 	
 }
 
 void UMonsterFSM::TickDie()
 {
+	if(false == MonsterAnim->IsDieDone)
+	{
+		return;
+	}
 	
-		PlayMontageDie();
 		UE_LOG(LogTemp,Warning,TEXT("Hit!"));
 		CurrentTime += GetWorld()->GetDeltaSeconds();
 		if(CurrentTime>Dietime)
@@ -217,11 +219,15 @@ void UMonsterFSM::TickDie()
 void UMonsterFSM::PlayMontageHit()
 {
 	Self->PlayAnimMontage(MonsterMontage,1,TEXT("Hit"));
+	// FName SectionName = TEXT("Hit");
+	// MonsterAnim->PlayMontageDamage(SectionName);
 }
 
 void UMonsterFSM::PlayMontageDie()
 {
 	Self->PlayAnimMontage(MonsterMontage,1,TEXT("Died"));
+	// FName SectionName = TEXT("Died");
+	// MonsterAnim->PlayMontageDamage(SectionName);
 }
 
 void UMonsterFSM::OnchangeMoveState()
