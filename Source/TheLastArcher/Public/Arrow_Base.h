@@ -30,6 +30,10 @@ public:
 	// 부딪힌 몬스터 저장할 변수
 	class AMonsterBase* HitMonster;
 
+	class UPlayer_DamageType* Player_DamageType;
+
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
