@@ -36,4 +36,5 @@ public:
 	// UFUNCTION(BlueprintCallable)
 	// void TakeDamage(AActor* DamagedActor,float Damage);
 	
+	
 };

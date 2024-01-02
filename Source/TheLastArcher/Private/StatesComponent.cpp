@@ -16,8 +16,7 @@ UStatesComponent::UStatesComponent()
 
 	MaxHealth = 100;
 	CurrentHealth = MaxHealth;
-
-	//UpdateHP(MaxHealth);
+	UpdateHP(MaxHealth);
 
 	
 }
@@ -38,6 +37,7 @@ void UStatesComponent::BeginPlay()
 		Owner->OnTakeAnyDamage.AddDynamic(this,&UStatesComponent::TakeDamage);
 		
 	}
+	
 }
 
 void UStatesComponent::UpdateHP(float UpdatedHealth)
@@ -84,7 +84,11 @@ void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 		return;
 	}
 	// 데미지가 들어오면 CurrentHealth에서 데미지 값을 빼라.
-	CurrentHealth = FMath::Clamp(CurrentHealth-Damage,0.0f,MaxHealth);
+	//CurrentHealth = FMath::Clamp(CurrentHealth-Damage,0.0f,MaxHealth);
+
+	// 업데이트 함수 활용
+	UpdateHP(-Damage);
+
 	UE_LOG(LogTemp,Warning,TEXT("Damaged!"));
 	// 함수가 호출되었을때 맞은 대상이 몬스터인지 확인
 	if(DamagedActor->IsA<AMonsterBase>())
