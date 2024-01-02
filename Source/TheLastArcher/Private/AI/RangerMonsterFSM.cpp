@@ -8,6 +8,7 @@
 #include "AI/MonsterAnim.h"
 #include "AI/MonsterArrowActor.h"
 #include "Components/ArrowComponent.h"
+#include "Misc/LowLevelTestAdapter.h"
 
 
 URangerMonsterFSM::URangerMonsterFSM()
@@ -53,12 +54,14 @@ void URangerMonsterFSM::TickAttack()
 
 void URangerMonsterFSM::PlayMontageHit()
 {
-	Self->PlayAnimMontage(MonsterMontage,1,"RangerHit");
+	FName SectionName = TEXT("RangerHit");
+	MonsterAnim->PlayMontageDamage(SectionName);
 }
 
 void URangerMonsterFSM::PlayMontageDie()
 {
-	Self->PlayAnimMontage(MonsterMontage,1,"RangerDie");
+	FName SectionName = TEXT("RangerDie");
+	MonsterAnim->PlayMontageDamage(SectionName);
 }
 
 void URangerMonsterFSM::SpawnArrow()
