@@ -66,6 +66,7 @@ AMonsterBase::AMonsterBase()
 //=======================================================================================================================================
 
 	HPComp = CreateDefaultSubobject<UWidgetComponent>("HPComp");
+	HPComp -> SetupAttachment(RootComponent);
 	ConstructorHelpers::FClassFinder<UUserWidget>WidgetTemp(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/TheLastArchers/KSE/Blueprints/UI/WBP_HPBar.WBP_HPBar_C'"));
 	if(WidgetTemp.Succeeded())
 	{
