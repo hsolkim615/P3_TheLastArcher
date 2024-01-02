@@ -26,8 +26,8 @@ AMonsterArrowActor::AMonsterArrowActor()
 	Arrow->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComp");
-	ProjectileMovementComp->InitialSpeed = 8000;
-	ProjectileMovementComp->MaxSpeed = 8000;
+	ProjectileMovementComp->InitialSpeed = 5000;
+	ProjectileMovementComp->MaxSpeed = 5000;
 }
 
 
