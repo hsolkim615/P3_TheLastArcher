@@ -44,7 +44,8 @@ void AArrow_Base::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	ArrowCollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 
 }
 
@@ -65,7 +66,6 @@ void AArrow_Base::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	
 	
 }
 

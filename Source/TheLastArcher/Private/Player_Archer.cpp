@@ -16,6 +16,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "StatesComponent.h"
+#include "Components/CapsuleComponent.h"
+
 
 // Sets default values
 APlayer_Archer::APlayer_Archer()
@@ -376,6 +378,9 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 		FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // Ȱ ������ ��ġ
 
 		if (GoArrow) {
+			
+			GoArrow->ArrowCollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
 			// ȭ���� ���ư��� ����
 			GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
 

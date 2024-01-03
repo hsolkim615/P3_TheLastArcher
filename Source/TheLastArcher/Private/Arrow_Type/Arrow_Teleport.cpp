@@ -6,67 +6,91 @@
 #include <../../../../../../../Source/Runtime/Engine/Classes/GameFramework/Actor.h>
 #include "Player_Archer.h"
 #include "WarpPlace.h"
-#include <../../../../../../../Source/Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h>
+#include "Kismet/KismetSystemLibrary.h"
+#include "Components/PrimitiveComponent.h"
+#include <../../../../../../../Source/Runtime/Engine/Classes/Components/StaticMeshComponent.h>
 
 
 AArrow_Teleport::AArrow_Teleport()
 {
-	
+	TraceStartPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TraceStartPoint"));
+	TraceStartPoint->SetupAttachment(RootComponent);
+	TraceStartPoint->SetRelativeLocation(FVector(-0.44f, 0.8f, -40.5f));
+
 }
 
 void AArrow_Teleport::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-
-
-	// 부딧히는 대상 판정 수정 필요
-	if (OtherActor->IsA<AWarpPlace>()) {
-		/*
-		// 지정한 장소로 플레이어 이동 - 위프 위치 수정 필요
-		Player_Archer->SetActorLocation(FVector(0));
-
-
-		FVector HitPlace = 
-		*/
-		/*
-
-		//Player_Archer->SetActorLocation(FVector(0, 0, Player_Archer->GetDefaultHalfHeight()));
-
-
-		FHitResult hitInfo;
-		SetActorLocation(hitInfo.ImpactPoint + FVector(0, 0, Player_Archer->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()));
-
-		SetActorLocation(hitInfo.ImpactPoint + FVector(0, 0, Player_Archer->GetDefaultHalfHeight()));
-		*/
-
-		//this->Destroy();
-	}
-
-
-	if (OtherActor->IsA<AWarpPlace>()) {
+	if (OtherActor && OtherActor->IsA<AWarpPlace>()) {
 
 		UE_LOG(LogTemp, Warning, TEXT("Success Hit Warp"));
 
-        FVector HitPlace = FVector::ZeroVector;
-        TArray<UPrimitiveComponent*> OverlappingComponents;
-        GetOverlappingComponents(OverlappingComponents);
+		/*
+		// 플레이어가 이동할 최종 위치
+		FVector HitPlace = FVector::ZeroVector; // 초기화
+		// 충돌한 컴포넌트를 저장할 변수
+		UPrimitiveComponent* OverlappingComponents;
+		// 충도돌한 컴포넌트 변수에 저장
+		OverlappingComponents = Cast<UPrimitiveComponent>(OtherActor);
+		// 라인 트레이스 시작점 수정 필요 - 현재 화살의 중간점부터 나감 
+		FVector StartLoc = GetActorLocation();
 
 
-        for (UPrimitiveComponent* Component : OverlappingComponents) {
-            FHitResult HitResult;
-            if (Component->LineTraceComponent(HitResult, GetActorLocation(), GetActorLocation() + FVector(0, 0, -100), FCollisionQueryParams())) {
-                HitPlace = HitResult.ImpactPoint;
-                break;
-            }
-        }
+		if (OverlappingComponents) {
+			FHitResult HitResult;
+			if (OverlappingComponents->LineTraceComponent(HitResult, StartLoc, GetActorLocation() + FVector(0, 0, -100), FCollisionQueryParams())) {
+				HitPlace = HitResult.ImpactPoint;
+			}
 
-        if (HitPlace != FVector::ZeroVector) {
-            Player_Archer->SetActorLocation(HitPlace);
-        }
-
+			if (HitPlace != FVector::ZeroVector) {
+				Player_Archer->SetActorLocation(HitPlace);
+			}
+		}
 		
+		Destroy();
+		*/
+
+
+
 		//===========================================================
+
+		// 플레이어가 이동할 최종 위치
+        FVector HitPlace = FVector::ZeroVector; // 초기화
+		// 충돌한 컴포넌트를 저장할 배열
+        TArray<UPrimitiveComponent*> OverlappingComponents;
+		// 충도돌한 컴포넌트 배열에 저장
+        GetOverlappingComponents(OverlappingComponents);
+		// 라인 트레이스 시작점 수정 필요 - 현재 화살의 중간점부터 나감 
+		FVector StartLoc = TraceStartPoint->GetComponentLocation();
+		FVector EndLoc = StartLoc + FVector(0, 0, -100);
+
+		/*
+		// 라인 트레이스 시작점 수정 필요 - 현재 화살의 중간점부터 나감 
+		FVector StartLoc = GetActorLocation();
+		*/
+
+
+		for (UPrimitiveComponent* Component : OverlappingComponents) {
+			FHitResult HitResult;
+			if (Component->LineTraceComponent(HitResult, StartLoc, EndLoc, FCollisionQueryParams())) {// 부딪히는 콜리전 채널 점검필요
+				HitPlace = HitResult.ImpactPoint;
+
+
+
+				break;
+			}
+		}
+
+		if (HitPlace != FVector::ZeroVector) {
+			Player_Archer->SetActorLocation(HitPlace);
+		}
+
+		Destroy();
+
+		//===========================================================
+
 		/*
 			// 가리킨 지점(direction 방향으로 SightRange 거리만큼 발사한 라인이 땅과 닿은 지점)으로 
 
@@ -118,7 +142,6 @@ void AArrow_Teleport::NotifyActorBeginOverlap(AActor* OtherActor)
 		}
 		*/
 
-        Destroy();
     }
 
 

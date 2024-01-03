@@ -17,6 +17,9 @@ class THELASTARCHER_API AArrow_Teleport : public AArrow_Base
 public:
 	AArrow_Teleport();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* TraceStartPoint;
+
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 };

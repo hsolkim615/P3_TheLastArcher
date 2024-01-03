@@ -11,6 +11,7 @@
 
 
 
+
 AArrow_Normal::AArrow_Normal()
 {
 	Damage = 35.f;
@@ -29,6 +30,9 @@ void AArrow_Normal::NotifyActorBeginOverlap(AActor* OtherActor)
 	*/
 
 	if (OtherActor && OtherActor->IsA<AMonsterBase>()) {
+
+
+
 		UE_LOG(LogTemp, Warning, TEXT("Hit Monster"));
 		HitMonster = Cast<AMonsterBase>(OtherActor);
 
