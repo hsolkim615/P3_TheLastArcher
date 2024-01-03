@@ -35,6 +35,8 @@ AArrow_Base::AArrow_Base()
 
 	// 플레이어 저장
 	Player_Archer = Cast<APlayer_Archer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	//Player_Archer = GetOwner<APlayer_Archer>();
 }
 
 // Called when the game starts or when spawned
@@ -62,6 +64,8 @@ void AArrow_Base::Tick(float DeltaTime)
 void AArrow_Base::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+
+	
 	
 }
 

@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WarpPlace.generated.h"
+#include "Item_Base.generated.h"
 
 UCLASS()
-class THELASTARCHER_API AWarpPlace : public AActor
+class THELASTARCHER_API AItem_Base : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AWarpPlace();
+	AItem_Base();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,11 +22,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UBoxComponent* BoxCollision;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* PlaneCpmp;
 
 };
