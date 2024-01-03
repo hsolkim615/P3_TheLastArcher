@@ -364,6 +364,7 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 		// ������ collision�� shot collision�� overlap ���� ��� - if��
 
 		if (LoadArrow) {
+
 			GoArrow = LoadArrow;
 			LoadArrow->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 			LoadArrow = nullptr;
