@@ -7,6 +7,7 @@
 #include "InterchangeResult.h"
 #include "MonsterBase.h"
 #include "AI/MonsterFSM.h"
+#include "Player_Archer.h"
 
 
 UStatesComponent::UStatesComponent()
@@ -16,7 +17,6 @@ UStatesComponent::UStatesComponent()
 
 	MaxHealth = 100;
 	CurrentHealth = MaxHealth;
-	UpdateHP(MaxHealth);
 
 	
 }
@@ -111,7 +111,7 @@ void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 			Monster->MonsterFsm->PlayMontageDie();
 		}	
 	}
-	else
+	else if(DamagedActor->IsA<APlayer_Archer>())
 	{
 		//플레이어
 		UE_LOG(LogTemp,Warning,TEXT("PlayerHit111111111111111111111111111111111111"));
@@ -119,11 +119,14 @@ void UStatesComponent::TakeDamage( AActor* DamagedActor, float Damage,
 		if(CurrentHealth>0)
 		{
 			//UI 감소
+
+
 		}
 		// 죽으면
 		else
 		{
 			// 레벨 재시작
+
 		}
 	}
 	
