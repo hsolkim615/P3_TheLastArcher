@@ -16,6 +16,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "StatesComponent.h"
+#include "Components/CapsuleComponent.h"
+
 
 // Sets default values
 APlayer_Archer::APlayer_Archer()
@@ -25,23 +27,24 @@ APlayer_Archer::APlayer_Archer()
 
 	// 스텟 컴퍼넌트 부착
 	StatesComp = CreateDefaultSubobject<UStatesComponent>("StatesComp");
-	// ī�޶�
+	
+	// 카메라
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(RootComponent);
 
-	// Hmd - ��� ��� 
+	// Hmd - 머리
 	HmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hmd Mesh"));
 	HmdMesh->SetupAttachment(CameraComp);
 
 
-	// ������================
-	// ������ ��Ʈ�ѷ�
+	// 오른손================
+	// 오른손 컨트롤러
 	RightController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightController"));
 	RightController->SetupAttachment(RootComponent);
 	//RightController->SetRelativeLocation(FVector(30, 40, 0));
-	RightController->SetTrackingMotionSource(FName("Right")); // Ʈ��ŷ�� �ʿ�
+	RightController->SetTrackingMotionSource(FName("Right")); // 오른손에 매치
 
-	// ������ ����
+	// 오른손 외형
 	RightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("RightHand"));
 	RightHand->SetupAttachment(RightController);
 	RightHand->SetRelativeRotation(FRotator(0, 0, 90));
@@ -51,17 +54,17 @@ APlayer_Archer::APlayer_Archer()
 	if (RightHandMesh.Succeeded()) {
 		RightHand->SetSkeletalMesh(RightHandMesh.Object);
 	}
-	// ������================
+	// 오른손================
 
 
-	// �޼�==============
-	// �޼� ��Ʈ�ѷ�
+	// 왼손==============
+	// 왼손 컨트롤러
 	LeftController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftController"));
 	LeftController->SetupAttachment(RootComponent);
 	//LeftController->SetRelativeLocation(FVector(30, -40, 0));
-	LeftController->SetTrackingMotionSource(FName("Left"));// Ʈ��ŷ�� �ʿ�
+	LeftController->SetTrackingMotionSource(FName("Left"));// 왼손에 매치
 
-	// �޼� ����
+	// 왼손 외형
 	LeftHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("LeftHand"));
 	LeftHand->SetupAttachment(LeftController);
 	LeftHand->SetRelativeRotation(FRotator(0, -180, 90));
@@ -71,10 +74,11 @@ APlayer_Archer::APlayer_Archer()
 	if (LeftHandMesh.Succeeded()) {
 		LeftHand->SetSkeletalMesh(LeftHandMesh.Object);
 	}
-	// �޼�==============
+	// 왼손==============
 
 
-	// Ȱ===========
+	// 활===========
+	// 활 본체
 	BowMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BowMeshComp"));
 	BowMeshComp->SetupAttachment(LeftHand);
 	BowMeshComp->SetRelativeLocation(FVector(-8.5, 9, -2.5));
@@ -102,35 +106,35 @@ APlayer_Archer::APlayer_Archer()
 	}
 	*/
 
-	// Ȱ����
+	// 활 시위
 	UpBowString = CreateDefaultSubobject<UCableComponent>(TEXT("UpBowString"));
 	UpBowString->SetupAttachment(BowMeshComp);
 	UpBowString->SetRelativeLocation(FVector(-5, 0, 30));
-	UpBowString->NumSegments = 1; // cable�� �ⷷ�̴� ������ ���ֱ�
-	UpBowString->CableLength = 10.f; // cable�� ����
-	UpBowString->EndLocation = FVector(0); // cable�� end�� ��ġ��
+	UpBowString->NumSegments = 1; // cable의 장력 - 작을 수록 탄탄해짐
+	UpBowString->CableLength = 10.f; // cable의 길이
+	UpBowString->EndLocation = FVector(0); // cable의 end 위치 값
 
 	DownBowString = CreateDefaultSubobject<UCableComponent>(TEXT("DownBowString"));
 	DownBowString->SetupAttachment(BowMeshComp);
 	DownBowString->SetRelativeLocation(FVector(-4, 0, -30));
-	DownBowString->NumSegments = 1; // cable�� �ⷷ�̴� ������ ���ֱ�
-	DownBowString->CableLength = 10.f; // cable�� ����
-	DownBowString->EndLocation = FVector(0); // cable�� end�� ��ġ��
+	DownBowString->NumSegments = 1; // cable의 장력 - 작을 수록 탄탄해짐
+	DownBowString->CableLength = 10.f; // cable의 길이
+	DownBowString->EndLocation = FVector(0); // cable의 end 위치 값
 
 
-	// Ȱ===========
+	// 활===========
 
 
 
 
 	// collision =========================
-	// Ȱ ���� collision 
+	// 활 시위 collision 
 	BowStringCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BowStringComllision"));
 	BowStringCollision->SetupAttachment(BowStringPlace);
 	BowStringCollision->SetRelativeScale3D(FVector(0.15f));
 
 
-	// ������ ��� collision
+	// 화살을 쏠 수 있는 구역 collision
 	CanShotPlaceCollision = CreateDefaultSubobject<USphereComponent>(TEXT("CanShotPlaceCollision"));
 	CanShotPlaceCollision->SetupAttachment(BowMeshComp);
 	CanShotPlaceCollision->SetRelativeLocation(FVector(-45, 0, 0));
@@ -138,7 +142,7 @@ APlayer_Archer::APlayer_Archer()
 
 
 
-	// ������ collision
+	// 오른손 컨트롤러 collision
 	RightFingerCollision = CreateDefaultSubobject<USphereComponent>(TEXT("RightFingerCollision"));
 	RightFingerCollision->SetupAttachment(RightHand);
 	RightFingerCollision->SetRelativeLocation(FVector(0.6f, 12, -2.5));
@@ -169,7 +173,7 @@ void APlayer_Archer::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("Start Log ======================================================"));
 
-	// Ʈ��ŷ ����===============
+	// 트레킹 설정===============
 	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
 
 	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController()) {
@@ -181,36 +185,29 @@ void APlayer_Archer::BeginPlay()
 
 		}
 	}
-	// Ʈ��ŷ ����===============
+	// 트레킹 설정===============
 
 
 
+	// 화살 설정 ========================
 
-
-	// ȭ�� ���� ========================
-
-	// ������ �� �ִ� ȭ�� ���� �ʱ�ȭ
+	// 장전 가능한 화살 Normal로 초기화
 	Choose_Normal = true;
 
-	// ȭ�� ������ ��ġ - �ٲ�� ��
+	// 화살을 시폰할 위치 값 초기화
 	//ArrowSpawnPlace = BowMeshComp->GetBoneTransform(TEXT("bowstring"));
 	ArrowSpawnPlace = BowMeshComp->GetRelativeTransform();
 
-	// ȭ�� ���� ========================
+	// 화살 설정 ========================
 
 
 
-
-
-
-	// Ȱ ���� =======================================
-	// CableComponent�� ������ �� �ֵ��� �غ��� Mesh�� attach -> BowStringPlace�� ���������ν� Ȱ ������ ������� ��� ���� ����
+	// 활 시위 =======================================
+	// CableComponent를 활 시위 중심Mesh에 attach -> BowStringPlace의 위치 값의 변화를 CableCompoenet들이 따라 다녀, 활 시위를 당기는 모습을 연출할 수 있음
 	UpBowString->SetAttachEndToComponent(BowStringPlace);
 	DownBowString->SetAttachEndToComponent(BowStringPlace);
 
-
-
-	// Ȱ ���� =======================================
+	// 활 시위 =======================================
 
 
 
@@ -222,8 +219,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-
-	// Player �̵�================================
+	// Player 이동================================
 	PlayerDirection.Normalize();
 
 	FTransform ControllerTransform = FTransform(this->GetControlRotation());
@@ -233,7 +229,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 	this->AddMovementInput(dir * 0.5f);
 
 	PlayerDirection = FVector::ZeroVector;
-	// Player �̵�================================
+	// Player 이동================================
 
 
 	/*
@@ -245,7 +241,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 	*/
 
 
-
+	/*
 	//
 	if (CameraComp->GetRelativeRotation().Yaw != 0.f) {
 
@@ -256,7 +252,7 @@ void APlayer_Archer::Tick(float DeltaTime)
 
 		CameraComp->SetRelativeRotation(FRotator(0));
 	}
-
+	*/
 }
 
 // �÷��̾� ���� Ű ���ε�
@@ -275,10 +271,10 @@ void APlayer_Archer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 
 
-		// �÷��̾� �̵� - �޼� ��ƽ*
+		// 플레이어 이동 - 왼손 스틱
 		EnhancedInputComponent->BindAction(IA_LeftThumbStick, ETriggerEvent::Triggered, this, &APlayer_Archer::LeftThumbStick_Move);
 
-		// �÷��̾� �þ� �¿� �̵� - ������ ��ƽ* 
+		// 플레이어 시야 움직임 - 오른손 스틱
 		EnhancedInputComponent->BindAction(IA_RightThumbStick, ETriggerEvent::Triggered, this, &APlayer_Archer::RightThumbStick_Turn);
 
 		// �÷��̾� �������� ���� �̵�
@@ -298,6 +294,7 @@ void APlayer_Archer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 
 		// �÷��̾� Ȱ �κ��丮 ����/�ݱ�
+		EnhancedInputComponent->BindAction(IA_RightGrip, ETriggerEvent::Triggered, this, &APlayer_Archer::RightGrip_TakeItem);
 
 		// �÷��̾� ������ ��� - ������ �׸�*
 
@@ -376,23 +373,42 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 		FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // Ȱ ������ ��ġ
 
 		if (GoArrow) {
-			// ȭ���� ���ư��� ����
+			
+			GoArrow->ArrowCollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+			// 화살 날아가는 방향 설정
 			GoArrow->ArrowGoingDirection = (BowMeshLocation - BowStringPlaceLocation).GetSafeNormal();
 
-			// AArrow_BaseŬ�������� tick���� ȭ���� ��������, AArrow_Base�� bool������ true�� ��
+			// AArrow_Base의 tick에서 화살이 날아가는 위치를 갱신하므로, AArrow_Base의 bool변수를 true로 해준다. 
 			GoArrow->bIsShotArrow = true;
 
-			// �߻�� ȭ���� 10�� �ڿ� �����
+			// 화살은 발사되고 10초 뒤에 사라진다. 
 			GoArrow->SetLifeSpan(10.f);
 
-			// ȭ�� ������ �����ϵ���
-			bIsLoadArrow = false;
+			// 화살이 장전되도록 한다. 
+			if (bIsLoadArrow == true) {
+				bIsLoadArrow = false;
+			}
 
 		}
 
 	}
-
+	
+	// 활 시위를 원래 위치로 설정
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
+
+}
+
+void APlayer_Archer::RightGrip_TakeItem(const FInputActionValue& value)
+{
+	
+	
+	
+	// 라인 트레이스를 실행하고, Item Collision인지 감지하고, 만약 Item이라면 플레이어의 손으로 끌어당김
+	//GetWorld()->LineTraceSingleByChannel();
+
+
+
 
 }
 
