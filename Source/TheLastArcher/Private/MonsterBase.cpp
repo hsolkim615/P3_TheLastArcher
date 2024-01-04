@@ -16,7 +16,7 @@
 #include "Kismet/KismetMathLibrary.h"
 
 
-// Sets default values
+
 AMonsterBase::AMonsterBase()
 {
 
