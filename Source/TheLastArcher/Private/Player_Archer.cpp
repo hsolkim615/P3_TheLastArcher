@@ -259,18 +259,16 @@ void APlayer_Archer::Tick(float DeltaTime)
 	*/
 
 
+
+	// 다른 키에 바인드해서 쓰는게 더 좋을 듯
 	/*
-	//
 	if (CameraComp->GetRelativeRotation().Yaw != 0.f) {
-
-		//this->SetActorRotation(FRotator(this->GetActorRotation().Pitch, (this->GetActorRotation().Yaw + CameraComp->GetRelativeRotation().Yaw), this->GetActorRotation().Roll));
-
-		//AddControllerYawInput(this->GetActorRotation().Yaw + CameraComp->GetRelativeRotation().Yaw);
-
-
+		AddControllerYawInput(CameraComp->GetRelativeRotation().Yaw);
 		CameraComp->SetRelativeRotation(FRotator(0));
 	}
 	*/
+
+
 }
 
 // �÷��̾� ���� Ű ���ε�
@@ -342,25 +340,164 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Success Right Trigger_Ready"));
 
-
-
 	if (BowStringCollision->IsOverlappingComponent(RightFingerCollision) == true) {
-		// Ȱ ������ ��ġ�� �������� ���ϰ� ���� ���� - LoadArrow�� Ȱ ������ �پ� �����Ƿ�, ����
-		// x�� ��ġ ���� �ʿ�
+		// 활 시위의 위치 값을 오른손에 따라 움직이도록 함 - 단, X축으로만 움직여 활 시위가 당겨지는 모습을 연출
 		BowStringPlace->SetRelativeLocation(FVector(RightController->GetRelativeLocation().X - 30.f, BowStringPlace->GetRelativeLocation().Y, BowStringPlace->GetRelativeLocation().Z));
 
+	}
+	/* 원본 ********************************************
+	// 화살이 날아갈 방향을 보여주는 가이드 라인
+		// 장전된 화살이 있는 경우
+	if (LoadArrow) {
+		//
+		FVector StartLocation = BowStringPlace->GetComponentLocation();
+		FVector EndLocation = LoadArrow->GetActorLocation() + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())).GetSafeNormal() * 2000.0f;
 
-		// ȭ�� ���ư��� ���̵� ����
-		if (LoadArrow) {
-			// ������ + ���� + ������ ����
-			FVector EndLocation = LoadArrow->GetActorLocation() + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())).GetSafeNormal() * 2000.0f;
+		// ����ȣ�� ���
+		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, -1, 0, 2.0f);
+	}
+	*/
 
-			// ����ȣ�� ���
-			DrawDebugLine(GetWorld(), BowStringPlace->GetComponentLocation(), EndLocation, FColor::Green, false, -1, 0, 2.0f);
+
+
+	//==========================
+
+
+	/*
+	FHitResult hitInfo;
+	float ArrowLength = 5000.0f;
+	FVector StartLocation = BowMeshComp->GetComponentLocation();
+	FVector EndLocation = LoadArrow->GetActorLocation() + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())).GetSafeNormal() * ArrowLength;
+	FVector hitLoc;
+	int32 segment = 50; // 곡선을 그리는 수. 클수록 부드러운 곡선이 나옴
+
+	// 라인이 보이는 것에 충돌할 경우, 가이드 라인을 그림
+	if (GetWorld()->LineTraceSingleByChannel(hitInfo, StartLocation, EndLocation, ECC_Visibility))
+	{
+		hitLoc = hitInfo.ImpactPoint;
+		FVector centorLoc = FVector((hitLoc.X + StartLocation.X) * 0.5f, (hitLoc.Y + StartLocation.Y) * 0.5f, StartLocation.Z);
+
+		// 베지어 곡선의 시작점, 중간점, 끝점 정의
+		FVector StartPoint1 = StartLocation;
+		FVector StartPoint2 = centorLoc;
+		FVector EndPoint = hitLoc;
+
+		float interval = 1.0f / (float)segment;
+
+		TArray<FVector> Results;
+
+		// 베지어 곡선을 계산하여 결과를 저장
+		for (int32 i = 0; i <= segment; ++i)
+		{
+			float t = interval * i;
+			FVector point = FMath::Lerp(FMath::Lerp(StartPoint1, StartPoint2, t), FMath::Lerp(StartPoint2, EndPoint, t), t);
+			Results.Add(point);
 		}
 
+		// 결과로 얻은 베지어 곡선 그리기
+		if (Results.Num() > 0)
+		{
+			for (int32 i = 0; i < Results.Num() - 1; i++)
+			{
+				DrawDebugLine(GetWorld(), Results[i], Results[i + 1], FColor::Green, false, 0, 0, 2);
+			}
+		}
+	}
+	*/
+
+	//==========================
+
+	// 화살이 날아갈 수 있는 거리 ======================
+	//float ArrowLength = 5000.0f; 
+
+	// 현재 Pitch 값을 가져오기
+	float CurrentPitch = LeftController->GetRelativeRotation().Pitch;
+
+	// ArrowLength를 계산하여 조정하기
+	float MinPitch = 90.0f;
+	float MaxPitch = 135.0f;
+	float MinArrowLength = 50000.0f;
+	float MaxArrowLength = 75000.0f;
+
+	float ArrowLength = 0.0f;
+
+	if (CurrentPitch >= MinPitch && CurrentPitch <= MaxPitch) {
+		// Pitch 값이 MinPitch와 MaxPitch 사이에 있을 때 ArrowLength를 조절
+		ArrowLength = FMath::Lerp(MinArrowLength, MaxArrowLength, (CurrentPitch - MinPitch) / (MaxPitch - MinPitch));
+	}
+	else if (CurrentPitch > MaxPitch) {
+		// Pitch 값이 MaxPitch보다 클 때 ArrowLength를 조절
+		ArrowLength = FMath::Clamp(MaxArrowLength - (CurrentPitch - MaxPitch), MinArrowLength, MaxArrowLength);
+	}
+	else {
+		// Pitch 값이 MinPitch보다 작을 때 ArrowLength를 유지
+		ArrowLength = MinArrowLength;
+	}
+	// 화살이 날아갈 수 있는 거리 ======================
+
+
+
+
+	// 베지어 곡선 =========================================
+	// 라인트레이스 ----------------------------
+	FHitResult hitInfo;
+	FVector StartLocation = BowMeshComp->GetComponentLocation();
+	FVector EndLocation = StartLocation + ((BowMeshComp->GetComponentLocation() - BowStringPlace->GetComponentLocation())).GetSafeNormal() * ArrowLength;
+	FVector hitLoc;
+	int32 segment = 500; // 곡선을 그리는 수. 클수록 부드러운 곡선이 나옴
+
+	//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 0, 0, 2);
+
+	// 라인이 보이는 것에 충돌할 경우, 가이드 라인을 그림
+	if (GetWorld()->LineTraceSingleByChannel(hitInfo, StartLocation, EndLocation, ECC_Visibility)) {
+		hitLoc = hitInfo.ImpactPoint; // 라인이 직선으로 나가게 됨
 
 	}
+	else {
+		if (GetWorld()->LineTraceSingleByChannel(hitInfo, EndLocation, EndLocation - FVector(0, 0, -10000), ECC_Visibility)) {
+			hitLoc = hitInfo.ImpactPoint; // 라인이 곡선으로 나가게 됨
+		}
+		else
+		{
+			hitLoc = EndLocation - FVector(0, 0, GetActorLocation().Z);
+		}
+	}
+	// 라인트레이스 ----------------------------
+
+
+
+
+
+	FVector centorLoc = FVector((hitLoc.X + StartLocation.X) * 0.5f, (hitLoc.Y + StartLocation.Y) * 0.5f, StartLocation.Z);
+
+	// 베지어 곡선의 시작점, 중간점, 끝점 정의
+	FVector StartPoint1 = StartLocation;
+	FVector StartPoint2 = EndLocation;
+	FVector EndPoint = centorLoc;
+
+	float interval = 1.0f / (float)segment;
+
+	TArray<FVector> Results;
+
+	// 베지어 곡선을 계산하여 결과를 저장
+	for (int32 i = 0; i <= segment; ++i)
+	{
+		float t = interval * i;
+		FVector point = FMath::Lerp(FMath::Lerp(StartPoint1, StartPoint2, t), FMath::Lerp(StartPoint2, EndPoint, t), t);
+		Results.Add(point);
+	}
+
+	// 결과로 얻은 베지어 곡선 그리기
+	if (Results.Num() > 0)
+	{
+		for (int32 i = 0; i < Results.Num() - 1; i++)
+		{
+			DrawDebugLine(GetWorld(), Results[i], Results[i + 1], FColor::Green, false, 0, 0, 10);
+		}
+	}
+	//}
+	// 베지어 곡선 =========================================
+
 
 
 
@@ -423,6 +560,7 @@ void APlayer_Archer::RightGrip_TakeItem(const FInputActionValue& value)
 
 
 
+	/*
 
 	class AItem_Base* HitItem;
 
@@ -430,9 +568,9 @@ void APlayer_Archer::RightGrip_TakeItem(const FInputActionValue& value)
 	TArray<UPrimitiveComponent*> OverlappingComponents;
 	// 충도돌한 컴포넌트 배열에 저장
 	GetOverlappingComponents(OverlappingComponents);
-	// 라인 트레이스 시작점  
+	// 라인 트레이스 시작점
 	FVector StartLoc = RightController->GetComponentLocation();
-	// 라인 트레이스 시작점  
+	// 라인 트레이스 시작점
 	FVector EndLoc = StartLoc + FVector(100, 0, 0);
 	// 시작점에서 도착점으로 라인이 나가는 동안, 부딪힌 액터가 있을 것
 
@@ -454,7 +592,7 @@ void APlayer_Archer::RightGrip_TakeItem(const FInputActionValue& value)
 			break;
 		}
 	}
-	/*
+
 	if (HitItem) {
 		// 저장된 위치 값으로 플레이어 이동
 		HitItem->SetActorLocation(RightController->GetComponentLocation());

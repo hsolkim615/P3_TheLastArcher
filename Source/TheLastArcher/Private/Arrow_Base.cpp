@@ -53,13 +53,30 @@ void AArrow_Base::BeginPlay()
 void AArrow_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	/*
 	if (bIsShotArrow == true) {
 
 		// ArrowGoingDirection의 방향으로 화살이 날아가도록 함
 		this->SetActorLocation(GetActorLocation() + ArrowGoingDirection * ArrowSpeed * DeltaTime);
 
 	}
+	*/
+
+	if (bIsShotArrow == true) {
+		FVector StartLocation = GetActorLocation();  // 시작 위치
+		FVector EndLocation = StartLocation + ArrowGoingDirection * ArrowSpeed * DeltaTime;  // 목표 위치
+		FVector MiddleLocation = (StartLocation + EndLocation) / 2.0f;  // 중간 위치
+
+		// 화살이 곡선으로 이동하도록 중간 지점을 향해 설정
+		FVector NewDirection = (MiddleLocation - GetActorLocation()).GetSafeNormal();
+
+		this->SetActorLocation(GetActorLocation() + NewDirection * ArrowSpeed * DeltaTime);
+	}
+
+
+
+
+
 }
 
 void AArrow_Base::NotifyActorBeginOverlap(AActor* OtherActor)
