@@ -182,14 +182,16 @@ private: // Bind Function
 
 
 
-	// ������ �Է�
+	// 오른손
 	void RightThumbStick_Turn(const FInputActionValue& value); // �÷��̾� ������
 
 	void RightTrigger_Attack_Ready(const FInputActionValue& value); // �÷��̾� ���� - ȭ�� ��� 
 	void RightTrigger_Attack_Shot(const FInputActionValue& value); // �÷��̾� ���� - ȭ�� ����
 
+	void RightGrip_TakeItem(const FInputActionValue& value); // �÷��̾� ���� - ȭ�� ����
 
-	// �޼� �Է�
+
+	// 왼손
 	void LeftThumbStick_Move(const FInputActionValue& value); // �÷��̾� �þ� ����
 
 	void LeftTrigger_LoadArrow(const FInputActionValue& value); // �÷��̾� ȭ�� ����

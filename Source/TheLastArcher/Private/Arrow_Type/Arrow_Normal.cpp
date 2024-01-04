@@ -38,21 +38,7 @@ void AArrow_Normal::NotifyActorBeginOverlap(AActor* OtherActor)
 
 		HitMonster->HP->TakeDamage(HitMonster, Damage, Player_DamageType, nullptr, this);
 
-		/*
-		const UNormalArrow_Type* NormalArrow_Type = NewObject<UNormalArrow_Type>();
-
-		if (HitMonster && HitMonster->HP) {
-			UE_LOG(LogTemp, Warning, TEXT("HP"));
-
-
-
-			HitMonster->TakeDamage(HitMonster, 20.f, NormalArrow_Type, nullptr, this);
-
-		}
-		*/
-
-
-		this->Destroy();
+		Destroy();
 
 	}
 	

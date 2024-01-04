@@ -9,13 +9,23 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/PrimitiveComponent.h"
 #include <../../../../../../../Source/Runtime/Engine/Classes/Components/StaticMeshComponent.h>
+#include <../../../../../../../Source/Runtime/Engine/Public/CollisionQueryParams.h>
+#include <../../../../../../../Source/Runtime/Engine/Classes/Engine/EngineTypes.h>
+#include "Components/CapsuleComponent.h"
 
 
 AArrow_Teleport::AArrow_Teleport()
 {
+	
+
+
+
+
+	// 라인 시작 위치를 static메쉬로 설정
 	TraceStartPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TraceStartPoint"));
 	TraceStartPoint->SetupAttachment(RootComponent);
-	TraceStartPoint->SetRelativeLocation(FVector(-0.44f, 0.8f, -40.5f));
+	//TraceStartPoint->SetRelativeLocation(FVector(-0.44f, 0.8f, -40.5f)); 
+	TraceStartPoint->SetRelativeLocation(FVector(-18, 13, -32)); // (X=-18.000000,Y=13.000000,Z=-32.000000)
 
 }
 
@@ -27,67 +37,51 @@ void AArrow_Teleport::NotifyActorBeginOverlap(AActor* OtherActor)
 
 		UE_LOG(LogTemp, Warning, TEXT("Success Hit Warp"));
 
-		/*
 		// 플레이어가 이동할 최종 위치
 		FVector HitPlace = FVector::ZeroVector; // 초기화
-		// 충돌한 컴포넌트를 저장할 변수
-		UPrimitiveComponent* OverlappingComponents;
-		// 충도돌한 컴포넌트 변수에 저장
-		OverlappingComponents = Cast<UPrimitiveComponent>(OtherActor);
-		// 라인 트레이스 시작점 수정 필요 - 현재 화살의 중간점부터 나감 
-		FVector StartLoc = GetActorLocation();
-
-
-		if (OverlappingComponents) {
-			FHitResult HitResult;
-			if (OverlappingComponents->LineTraceComponent(HitResult, StartLoc, GetActorLocation() + FVector(0, 0, -100), FCollisionQueryParams())) {
-				HitPlace = HitResult.ImpactPoint;
-			}
-
-			if (HitPlace != FVector::ZeroVector) {
-				Player_Archer->SetActorLocation(HitPlace);
-			}
-		}
-		
-		Destroy();
-		*/
-
-
-
-		//===========================================================
-
-		// 플레이어가 이동할 최종 위치
-        FVector HitPlace = FVector::ZeroVector; // 초기화
 		// 충돌한 컴포넌트를 저장할 배열
-        TArray<UPrimitiveComponent*> OverlappingComponents;
+		TArray<UPrimitiveComponent*> OverlappingComponents;
 		// 충도돌한 컴포넌트 배열에 저장
-        GetOverlappingComponents(OverlappingComponents);
-		// 라인 트레이스 시작점 수정 필요 - 현재 화살의 중간점부터 나감 
+		GetOverlappingComponents(OverlappingComponents);
+		// 라인 트레이스 시작점  
 		FVector StartLoc = TraceStartPoint->GetComponentLocation();
+		// 라인 트레이스 시작점  
 		FVector EndLoc = StartLoc + FVector(0, 0, -100);
+		// 시작점에서 도착점으로 라인이 나가는 동안, 부딪힌 액터가 있을 것
 
-		/*
-		// 라인 트레이스 시작점 수정 필요 - 현재 화살의 중간점부터 나감 
-		FVector StartLoc = GetActorLocation();
-		*/
+		//FCollisionQueryParams TraceParams(FName(TEXT("MyTrace")), false);
+		FCollisionObjectQueryParams ObjectParams;
+		// WarpPlace콜리전 채널만 감지하도록 함
+		ObjectParams.AddObjectTypesToQuery(ECC_GameTraceChannel9);
 
-
+		// OverlappingComponents의 크기만큼 반복 - 아마 1일 것
 		for (UPrimitiveComponent* Component : OverlappingComponents) {
+			// 부딪힌 결과 값
 			FHitResult HitResult;
-			if (Component->LineTraceComponent(HitResult, StartLoc, EndLoc, FCollisionQueryParams())) {// 부딪히는 콜리전 채널 점검필요
+			// 라인이 부딪힌 경우
+			if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartLoc, EndLoc, ObjectParams, FCollisionQueryParams())) {// 부딪히는 콜리전 채널 점검필요
+				// 라인이 부딪힌 위치를 저장
 				HitPlace = HitResult.ImpactPoint;
-
-
 
 				break;
 			}
 		}
 
 		if (HitPlace != FVector::ZeroVector) {
+			// 저장된 위치 값으로 플레이어 이동
 			Player_Archer->SetActorLocation(HitPlace);
 		}
-
+		
 		Destroy();
+
+
+		// 문제1 - 라인이 시작하는 위치로 GetComponentLocation()를 하였으나, 이는 화살의 중심점이므로, 그곳에서 화살을 쏘면 플레이어가 화살이 부딪힌 위치보다 조금 뒤로 이동하게 됨. 그러니 라인의 시작 위치를 화살촉의 부분이 되도록 조정할 필요가 있음 = 해결
+		
+		// 문제2 - 플레이어의 위치 이동이 안됨 -> 라인의 길이가 콜리전의 영역 밖으로 나갈정도의 길이가 되어야 함. 그렇지 않으면 콜리전이 부딪혔을 때, 라인은 아무 액터에도 부딪히지 못하고 위치값을 가져오지 못함. 위치 값이 없으면 플레이어는 이동을 못함
+			// 또는 화살을 감싸는 콜리전의 크기 자체를 줄여볼 수도 있음
+			// 마약 라인의 길이가 너무 길면 너무 일찍 라인이 나가면, 보이는 것보다 일찍 라인이 충돌해서 플레이어가 의도한 것보다 뒤쪽으로 이동할 수 있음
+
+
 
 		//===========================================================
 
