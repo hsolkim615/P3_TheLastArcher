@@ -9,18 +9,18 @@
 
 void UBossMonsterAnim::AnimNotify_Throw()
 {
-	auto Boss = Cast<AMonsterBoss>(TryGetPawnOwner());
+	AMonsterBoss* Boss = Cast<AMonsterBoss>(TryGetPawnOwner());
 	if(Boss != nullptr)
 	{
 		Boss->BossFsm->SpawnRock();
 	}
 }
 
-void UBossMonsterAnim::AnimNotify_SpawnSkull()
+void UBossMonsterAnim::AnimNotify_Spawn()
 {
 	auto Boss = Cast<AMonsterBoss>(TryGetPawnOwner());
 	if(Boss != nullptr)
 	{
-		// Boss->BossFsm
+		Boss->BossFsm->SpawnSkull();
 	}
 }

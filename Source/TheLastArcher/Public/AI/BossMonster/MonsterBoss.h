@@ -38,4 +38,11 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	USphereComponent* DamagePoint;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	class UArrowComponent* SkullSpawn1;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	class UArrowComponent* SkullSpawn2;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	class UArrowComponent* SkullSpawn3;
 };

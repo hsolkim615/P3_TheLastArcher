@@ -43,6 +43,7 @@ void UStatesComponent::BeginPlay()
 void UStatesComponent::UpdateHP(float UpdatedHealth)
 {
 	CurrentHealth = FMath::Max(0,CurrentHealth+UpdatedHealth);
+	UE_LOG(LogTemp,Warning,TEXT("damage: %.1f, curent Health: %.1f"), UpdatedHealth, CurrentHealth);
 	
 }
 

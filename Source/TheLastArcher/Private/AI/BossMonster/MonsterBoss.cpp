@@ -6,6 +6,7 @@
 #include "StaticMeshAttributes.h"
 #include "AI/BossMonster/MonsterBossFSM.h"
 #include "Components/SphereComponent.h"
+#include "Components/ArrowComponent.h"
 
 
 AMonsterBoss::AMonsterBoss()
@@ -38,7 +39,22 @@ AMonsterBoss::AMonsterBoss()
 	//(X=0.000000,Y=0.500000,Z=1.000000)
 	DamagePoint -> SetRelativeLocation(FVector(0,0.5f,1.0f));
 	DamagePoint -> SetRelativeScale3D(FVector(0.04f));
-}
+	
+//=======~================================================================================================================================
+
+	SkullSpawn1 = CreateDefaultSubobject<UArrowComponent>("SkullSpawn1");
+	SkullSpawn1 -> SetRelativeLocation(FVector(0,660.f,550.f));
+	SkullSpawn1 ->SetupAttachment(RootComponent);
+	SkullSpawn2 = CreateDefaultSubobject<UArrowComponent>("SkullSpawn2");
+	SkullSpawn2 -> SetRelativeLocation(FVector(0,-930.f,380.f));
+	SkullSpawn2 ->SetupAttachment(RootComponent);
+
+	SkullSpawn3 = CreateDefaultSubobject<UArrowComponent>("SkullSpawn3");
+	SkullSpawn3 -> SetRelativeLocation(FVector(0,0,780.f));
+	SkullSpawn3 -> SetupAttachment(RootComponent);
+}	
+
+
 
 
 void AMonsterBoss::BeginPlay()

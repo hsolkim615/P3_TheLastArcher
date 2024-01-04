@@ -3,8 +3,12 @@
 
 #include "AI/BossMonster/BossMonsterProjectile.h"
 
+#include "Player_Archer.h"
+#include "AI/BossMonster/MonsterBoss.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Math/UnitConversion.h"
 
 // Sets default values
 ABossMonsterProjectile::ABossMonsterProjectile()
@@ -25,10 +29,6 @@ ABossMonsterProjectile::ABossMonsterProjectile()
 		MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		MeshComp->SetRelativeScale3D(FVector(0.1f));
 	}
-
-	// PRJComp = CreateDefaultSubobject<UProjectileMovementComponent>("PRJComp");
-	// PRJComp ->InitialSpeed = 1000.f;
-	// PRJComp -> MaxSpeed = 1000.f;
 	
 }
 
@@ -36,17 +36,30 @@ ABossMonsterProjectile::ABossMonsterProjectile()
 void ABossMonsterProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	Target = Cast<APlayer_Archer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	auto Temp = UGameplayStatics::GetActorOfClass(GetWorld(), 
+			AMonsterBoss::StaticClass());
+	Self = Cast<AMonsterBoss>(Temp);
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this,&ABossMonsterProjectile::OverlapBegin);
+	
+	
 }
 
 // Called every frame
 void ABossMonsterProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//
+	if(Target!= nullptr)
+	{
 
-	FVector Direction = GetActorForwardVector() * Speed;
-	SetActorLocation(GetActorLocation()+Direction * DeltaTime);
+		FVector Direction = Target->GetActorLocation() - Self->GetActorLocation();
+		Direction.Normalize();
+		FVector Velocity = Direction * Speed;
+		SetActorLocation(GetActorLocation()+Velocity*DeltaTime);
+		
+	}
+	
+	
 }
 
 void ABossMonsterProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

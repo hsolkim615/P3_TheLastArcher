@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BossMonsterProjectile.generated.h"
 
+class AMonsterBoss;
+class APlayer_Archer;
 class UProjectileMovementComponent;
 class USphereComponent;
 
@@ -27,14 +29,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	APlayer_Archer* Target;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	AMonsterBoss* Self;
 	UPROPERTY(EditAnywhere,Category="PorjectileSettings")
 	USphereComponent* SphereComp;	
 	UPROPERTY(EditAnywhere,Category="PorjectileSettings")
 	UStaticMeshComponent* MeshComp;
 	UPROPERTY(EditAnywhere,Category="PorjectileSettings")
 	UProjectileMovementComponent* PRJComp;
-	
-	float Speed = 2000.f;
+
+	UPROPERTY(EditAnywhere,Category="PorjectileSettings")
+	float Speed;
+
 private:
 	float Damage = 20;
 	UFUNCTION()

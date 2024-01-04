@@ -27,11 +27,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayMontageThrow(FName Section);
 
-	
 private:
 	
 	UFUNCTION()
 	void AnimNotify_Throw();
 	UFUNCTION()
-	void AnimNotify_SpawnSkull();
+	void AnimNotify_Spawn();
 };

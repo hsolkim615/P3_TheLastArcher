@@ -50,17 +50,21 @@ public:
 	EBossMonsterState State;
 //=======~================================================================================================================================
 
+	UPROPERTY(EditAnywhere,Category="BossMonsterSettings")
+	float CurrentTime = 0;
+	UPROPERTY(EditAnywhere,Category="BossMonsterSettings")
+	float SkillCoolTime = 0;
+	UPROPERTY(EditAnywhere,Category="BossMonsterSettings")
+	float AttackTime = 5.0f;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterSettings")
-	float CurrentTime;
+	float SpawnTime = 0;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterSettings")
-	float SkillCoolTime;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterSettings")
-	float AttackTime = 3.0f;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterSettings")
-	float SkillTime = 10.f;
-
+	float FixedSpawnTime = 1;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABossMonsterProjectile> PRJClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ABossSkullProjectile> SkullClass;
 
 //=======~================================================================================================================================
 
