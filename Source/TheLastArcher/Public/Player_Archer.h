@@ -237,7 +237,7 @@ public:
 	// ���� ȭ�� ���� ->Ȱ���� ȭ�쿡 UI
 	float PlayerHP = 100.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStatesComponent* StatesComp;
 
 };

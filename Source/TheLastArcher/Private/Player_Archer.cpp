@@ -245,8 +245,10 @@ void APlayer_Archer::Tick(float DeltaTime)
 	PlayerDirection = FVector::ZeroVector;
 	// Player 이동================================
 
+
+
 	// UI===========================================
-	SetCurrentPlayerHP(StatesComp->MaxHealth, StatesComp->CurrentHealth);
+	//SetCurrentPlayerHP(StatesComp->MaxHealth, StatesComp->CurrentHealth);
 
 	/*
 	FVector ForwardVector = CameraComp->GetForwardVector();
