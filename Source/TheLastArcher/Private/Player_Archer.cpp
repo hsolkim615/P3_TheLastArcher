@@ -17,6 +17,9 @@
 #include "Components/SphereComponent.h"
 #include "StatesComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Item_Base.h"
+#include <../../../../../../../Source/Runtime/UMG/Public/Components/WidgetComponent.h>
+#include <../../../../../../../Source/Runtime/UMG/Public/Blueprint/UserWidget.h>
 
 
 // Sets default values
@@ -27,7 +30,7 @@ APlayer_Archer::APlayer_Archer()
 
 	// 스텟 컴퍼넌트 부착
 	StatesComp = CreateDefaultSubobject<UStatesComponent>("StatesComp");
-	
+
 	// 카메라
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(RootComponent);
@@ -82,10 +85,10 @@ APlayer_Archer::APlayer_Archer()
 	BowMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BowMeshComp"));
 	BowMeshComp->SetupAttachment(LeftHand);
 	BowMeshComp->SetRelativeLocation(FVector(-8.5, 9, -2.5));
-	BowMeshComp->SetRelativeRotation(FRotator(13, 90, -90));
+	BowMeshComp->SetRelativeRotation(FRotator(13, 90, 90));
 	BowMeshComp->SetRelativeScale3D(FVector(1.5, 1.5, 3));
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh>BowMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Resource/Bow/uploads_files_3856554_bow.uploads_files_3856554_bow'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh>BowMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Resource/Bow/Bow.Bow'"));
 
 	if (BowMesh.Succeeded()) {
 		BowMeshComp->SetSkeletalMesh(BowMesh.Object);
@@ -147,11 +150,22 @@ APlayer_Archer::APlayer_Archer()
 	RightFingerCollision->SetupAttachment(RightHand);
 	RightFingerCollision->SetRelativeLocation(FVector(0.6f, 12, -2.5));
 	RightFingerCollision->SetRelativeScale3D(FVector(0.2));
-
-
-
 	// collision =========================
 
+
+	// UI ===================================
+	UI_PlayerHP = CreateDefaultSubobject<UWidgetComponent>(TEXT("UI_PlayerHP"));
+	UI_PlayerHP->SetupAttachment(BowMeshComp);
+	UI_PlayerHP->SetRelativeScale3D(FVector(0.01));
+	UI_PlayerHP->SetRelativeLocation(FVector(0, 0, 10));
+	UI_PlayerHP->SetRelativeRotation(FRotator(0, 180, 90));
+	UI_PlayerHP->SetVisibility(true);
+
+	ConstructorHelpers::FClassFinder<UUserWidget>W_UI_PlayerHP(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/TheLastArchers/KHS/UI/WBP_PlayerHP_UI.WBP_PlayerHP_UI'"));
+
+	if (W_UI_PlayerHP.Succeeded()) {
+		UI_PlayerHP->SetWidgetClass(W_UI_PlayerHP.Class);
+	}
 
 	/* *********************
 	// ������ ȭ���� ���� �ʱ�ȭ - Normal
@@ -231,6 +245,10 @@ void APlayer_Archer::Tick(float DeltaTime)
 	PlayerDirection = FVector::ZeroVector;
 	// Player 이동================================
 
+
+
+	// UI===========================================
+	//SetCurrentPlayerHP(StatesComp->MaxHealth, StatesComp->CurrentHealth);
 
 	/*
 	FVector ForwardVector = CameraComp->GetForwardVector();
@@ -373,7 +391,7 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 		FVector BowStringPlaceLocation = BowStringPlace->GetComponentLocation(); // Ȱ ������ ��ġ
 
 		if (GoArrow) {
-			
+
 			GoArrow->ArrowCollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 			// 화살 날아가는 방향 설정
@@ -393,7 +411,7 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 		}
 
 	}
-	
+
 	// 활 시위를 원래 위치로 설정
 	BowStringPlace->SetRelativeLocation(FVector(-5, 0, 0));
 
@@ -401,15 +419,47 @@ void APlayer_Archer::RightTrigger_Attack_Shot(const FInputActionValue& value)
 
 void APlayer_Archer::RightGrip_TakeItem(const FInputActionValue& value)
 {
-	
-	
-	
+	// 
+
+
+
+
+	class AItem_Base* HitItem;
+
+	// 충돌한 컴포넌트를 저장할 배열
+	TArray<UPrimitiveComponent*> OverlappingComponents;
+	// 충도돌한 컴포넌트 배열에 저장
+	GetOverlappingComponents(OverlappingComponents);
+	// 라인 트레이스 시작점  
+	FVector StartLoc = RightController->GetComponentLocation();
+	// 라인 트레이스 시작점  
+	FVector EndLoc = StartLoc + FVector(100, 0, 0);
+	// 시작점에서 도착점으로 라인이 나가는 동안, 부딪힌 액터가 있을 것
+
+	FCollisionObjectQueryParams ObjectParams;
+	// Item콜리전 채널만 감지하도록 함
+	ObjectParams.AddObjectTypesToQuery(ECC_GameTraceChannel10);
+
 	// 라인 트레이스를 실행하고, Item Collision인지 감지하고, 만약 Item이라면 플레이어의 손으로 끌어당김
-	//GetWorld()->LineTraceSingleByChannel();
+	// OverlappingComponents의 크기만큼 반복 - 아마 1일 것
+	for (UPrimitiveComponent* Component : OverlappingComponents) {
+		// 부딪힌 결과 값
+		FHitResult HitResult;
+		// 라인이 부딪힌 경우
+		if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartLoc, EndLoc, ObjectParams, FCollisionQueryParams())) {
+			// 라인이 부딪힌 위치를 저장
 
+			HitItem = Cast<AItem_Base>(HitResult.GetActor());
 
-
-
+			break;
+		}
+	}
+	/*
+	if (HitItem) {
+		// 저장된 위치 값으로 플레이어 이동
+		HitItem->SetActorLocation(RightController->GetComponentLocation());
+	}
+	*/
 }
 
 

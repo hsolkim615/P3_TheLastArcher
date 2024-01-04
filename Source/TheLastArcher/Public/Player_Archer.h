@@ -108,6 +108,16 @@ public:
 	// ������ ==============
 
 
+	// UI =====================================================
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UWidgetComponent* UI_PlayerHP;
+
+	// 블루프린트에서 정의할 것
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetCurrentPlayerHP(float MaxHP, float CurrentHP);
+
+
+
 public: // BindKey
 	// ������ 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings|BindKey")
@@ -227,7 +237,7 @@ public:
 	// ���� ȭ�� ���� ->Ȱ���� ȭ�쿡 UI
 	float PlayerHP = 100.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStatesComponent* StatesComp;
 
 };
