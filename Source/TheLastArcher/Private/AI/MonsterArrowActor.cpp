@@ -50,13 +50,13 @@ void AMonsterArrowActor::OverlapBegin(UPrimitiveComponent* OverlappedComponent, 
                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
                                       bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("11111111111111111111111!"));
+	//UE_LOG(LogTemp, Warning, TEXT("11111111111111111111111!"));
 	{
 		if(OtherActor->IsA<APlayer_Archer>())
 		{
-			UE_LOG(LogTemp,Warning,TEXT("22222222222222222222222222!"));
+			//UE_LOG(LogTemp,Warning,TEXT("22222222222222222222222222!"));
 			auto Target = Cast<APlayer_Archer>(OtherActor);
-			UE_LOG(LogTemp,Warning,TEXT("Hit231321321313212131231231231231232131"));
+			//UE_LOG(LogTemp,Warning,TEXT("Hit231321321313212131231231231231232131"));
 			Target->StatesComp->TakeDamage(Target,Damage,NomalDamge,nullptr,this);
 			this->Destroy();
 		}

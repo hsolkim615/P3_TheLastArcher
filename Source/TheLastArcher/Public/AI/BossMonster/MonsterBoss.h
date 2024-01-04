@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MonsterBoss.generated.h"
 
+class UWidgetComponent;
+class UStatesComponent;
 class USphereComponent;
 class UMonsterBossFSM;
 
@@ -28,21 +30,37 @@ public:
 
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+//=======================================================================================================================================
+
+public:
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	UMonsterBossFSM* BossFsm;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	UStatesComponent* StateComp;
+
+//=======================================================================================================================================
 
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	USkeletalMeshComponent* SpawnStone;
-
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
-	UMonsterBossFSM* BossFsm;
-
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	USphereComponent* DamagePoint;
-
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	class UArrowComponent* SkullSpawn1;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	class UArrowComponent* SkullSpawn2;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	class UArrowComponent* SkullSpawn3;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	UArrowComponent* SpawnSpellpoint;
+
+//=======================================================================================================================================
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	UWidgetComponent* HPcomponent;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	UStaticMeshComponent* WeekpointMeshComp;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
+	UCapsuleComponent* WeekpointCapsuleComp;
+	
 };

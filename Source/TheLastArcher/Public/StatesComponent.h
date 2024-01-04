@@ -7,6 +7,8 @@
 #include "StatesComponent.generated.h"
 
 
+class AMonsterBoss;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THELASTARCHER_API UStatesComponent : public UActorComponent
 {
@@ -27,6 +29,16 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float CurrentHealth;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	bool Paze2;
+
+	UPROPERTY(EditAnywhere)
+	AMonsterBoss* Boss;
+
+	
+	
+
 	
 	void UpdateHP(float UpdatedHealth);
 	

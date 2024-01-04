@@ -203,16 +203,18 @@ void UMonsterFSM::TickDie()
 	{
 		return;
 	}
-
+	
 	// 죽으면 콜리전 을 노콜리전은으로 바꾸고싶다.
+
 	Self->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	UE_LOG(LogTemp,Warning,TEXT("Hit!"));
 	CurrentTime += GetWorld()->GetDeltaSeconds();
 	if(CurrentTime>Dietime)
 	{
-			// 2초동안 대기 했다각
-			// 이펙트를 작동하고 죽고싶다.
-			Self->Destroy();
+		// 2초동안 대기 했다각
+		// 이펙트를 작동하고 죽고싶다.
+		IsDead();
+		Self->Destroy();
 	}
 	
 	
@@ -235,6 +237,11 @@ void UMonsterFSM::PlayMontageDie()
 void UMonsterFSM::OnchangeMoveState()
 {
 	SetState(EMonsterState::Move);
+}
+
+bool UMonsterFSM::IsDead()
+{
+	return bIsDead;
 }
 
 void UMonsterFSM::SetState(EMonsterState Next)

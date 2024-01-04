@@ -8,6 +8,7 @@
 #include "BossSkullProjectile.generated.h"
 
 
+class UPlayer_DamageType;
 class UProjectileMovementComponent;
 class AMonsterBoss;
 class APlayer_Archer;
@@ -46,6 +47,17 @@ public:
 
 	UPROPERTY(EditAnywhere,Category="BossSettings")
 	float Speed = 1500;
+
+	UPROPERTY(EditAnywhere,Category="BossSettings")
+	float Damage = 20;
+
+	UPROPERTY(EditAnywhere,Category="BossSettings")
+	UPlayer_DamageType* NormalDamage;
+	
+	UPROPERTY()
+	FTimerHandle TimerHandle_FindTarget;
+	// 위치를 계속 최신화 하는 함수를 만든다.
+	void FindTarget();
 	
 	UFUNCTION()
 	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

@@ -24,3 +24,12 @@ void UBossMonsterAnim::AnimNotify_Spawn()
 		Boss->BossFsm->SpawnSkull();
 	}
 }
+
+void UBossMonsterAnim::AnimNotify_Spell()
+{
+	auto Boss = Cast<AMonsterBoss>(TryGetPawnOwner());
+	if(Boss != nullptr)
+	{
+		Boss->BossFsm->SpawnSpell();
+	}
+}

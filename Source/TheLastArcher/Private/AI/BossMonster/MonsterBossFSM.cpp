@@ -4,12 +4,17 @@
 #include "AI/BossMonster/MonsterBossFSM.h"
 
 #include "AIController.h"
+#include "MonsterBase.h"
 #include "Player_Archer.h"
 #include "AI/BossMonsterAnim.h"
+#include "AI/MonsterFSM.h"
 #include "AI/BossMonster/BossMonsterProjectile.h"
 #include "AI/BossMonster/BossSkullProjectile.h"
 #include "AI/BossMonster/MonsterBoss.h"
+#include "AI/BossMonster/SpawnedSpell.h"
 #include "Components/ArrowComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 
 
 UMonsterBossFSM::UMonsterBossFSM()
@@ -48,10 +53,13 @@ void UMonsterBossFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	switch (State)
 	{
-	case EBossMonsterState :: Idle:		  TickIdle();		break;
-	case EBossMonsterState :: Throw:	  TickThrow();		break;
-	case EBossMonsterState :: SpawnSkull: TickSpawnSkull(); break;
-	case EBossMonsterState :: Died:	      TickDied();		break;
+	case EBossMonsterState :: Idle:		    TickIdle();		break;
+	case EBossMonsterState :: Throw:	    TickThrow();		break;
+	case EBossMonsterState :: SpawnSkull:   TickSpawnSkull(); break;
+	case EBossMonsterState :: Phase2:		Tickphase2();	  break;
+	case EBossMonsterState :: SpawnMonster: TickSpawnMonster(); break;
+	case EBossMonsterState :: CastSpell:    TickCastSpell(); break;
+	case EBossMonsterState :: Died:	        TickDied();		break;
 	}
 	
 }
@@ -111,6 +119,54 @@ void UMonsterBossFSM::TickSpawnSkull()
 void UMonsterBossFSM::TickDied()
 {
 	// 죽으면 애니메이션 발동 후 사망.
+	CurrentTime += GetWorld()->GetDeltaSeconds();
+	if(CurrentTime > DieTime)
+	{
+		Self->PlayAnimMontage(AM_BossAction,1.0f,FName("Died"));
+		Self->Destroy();	
+	}
+	
+}
+
+void UMonsterBossFSM::Tickphase2()
+{
+	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// 시간이 흐르면 랜덤으로
+	CurrentTime += GetWorld()->GetDeltaSeconds();
+	if(CurrentTime > AttackTime)
+	{
+		float RandomValue = FMath::FRand();
+		if(RandomValue<0.2f)
+		{
+			SetState(EBossMonsterState::SpawnMonster);
+			
+		}
+		else
+		{
+			SetState(EBossMonsterState::CastSpell);
+		}
+	}
+}
+
+void UMonsterBossFSM::TickSpawnMonster()
+{
+	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// 몬스터를 소환하는 동안 약점 콜리전을 꺼서 무적 상태로 만들고 몬스터를 다 잡으면 무적상태가 풀리게된다.
+	//소환
+	if(IsAllDead()==true)
+	{
+		// 콜리전을 몬스터 형태로 바꿔준다.
+		// Self->WeekpointCapsuleComp->SetCollisionEnabled(ECollisionEnabled::);
+	}
+	// 무적 상태가 풀리면 시간을 초기화 하고, 다음 행동으로 넘어간다.
+}
+
+void UMonsterBossFSM::TickCastSpell()
+{
+	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Self->PlayAnimMontage(AM_BossAction,1.0f,FName("MonsterSpell"));
+	// 마법을 캐스팅하는동안 특정 액터를 손에 만들고 그 액터를 부수지못하면 플레이어는 죽게만든다.
+	// 부수게 되면 애니메이션이 작동하여 약점이 노출되게한다. 애니메이션이 끝나면 다음 행동으로 넘어간다.
 }
 
 void UMonsterBossFSM::SetState(EBossMonsterState Next)
@@ -154,9 +210,32 @@ void UMonsterBossFSM::SpawnSkull()
 
 }
 
+void UMonsterBossFSM::SpawnSpell()
+{
+	FTransform SpawnSpellLoc = Self->SpawnSpellpoint->GetComponentTransform();
+	GetWorld()->SpawnActor<ASpawnedSpell>(SpellClass,SpawnSpellLoc);
+}
+
 void UMonsterBossFSM::OnThrowMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	
+}
+
+// 죽었는지 확인하는 함수.
+bool UMonsterBossFSM::IsAllDead()
+{
+	// 배열안에 있는 몬스터들을 확인하여
+	for(AMonsterBase* SummonedMonster:SummonedMonsters)
+	{
+		//죽은게 아니라면
+		if(SummonedMonster && !SummonedMonster->MonsterFsm->IsDead())
+		{
+			// false반환
+			return false;
+		}
+	}
+	// 다죽으면 true반환
+	return true;
 }
 
 

@@ -33,4 +33,7 @@ private:
 	void AnimNotify_Throw();
 	UFUNCTION()
 	void AnimNotify_Spawn();
+	UFUNCTION()
+	void AnimNotify_Spell();
+	
 };

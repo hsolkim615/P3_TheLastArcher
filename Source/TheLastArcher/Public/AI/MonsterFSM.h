@@ -111,5 +111,9 @@ public:
 	
 	void OnchangeMoveState();
 //================================================================================================================
+public:
+	UPROPERTY(EditAnywhere)
+	bool bIsDead = false;
 
+	bool IsDead();
 };

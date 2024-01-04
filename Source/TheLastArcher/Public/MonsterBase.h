@@ -58,5 +58,7 @@ public:
 	// 블루프릔트에서 UI에 연동시키기 위한 함수 선언.
 	// UFUNCTION(BlueprintImplementableEvent)
 	// void DamgeUpdateUI(float CurrentHp, float MaxHp);
+
+	
 	
 };

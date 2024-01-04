@@ -7,6 +7,7 @@
 #include "MonsterBossFSM.generated.h"
 
 
+class AMonsterBase;
 class UBossMonsterAnim;
 class AAIController;
 class APlayer_Archer;
@@ -18,6 +19,9 @@ enum class EBossMonsterState : uint8
 	Idle,
 	Throw,
 	SpawnSkull,
+	 Phase2,
+	SpawnMonster,
+	CastSpell,
 	Died,
 };
 
@@ -56,6 +60,8 @@ public:
 	float SkillCoolTime = 0;
 	UPROPERTY(EditAnywhere,Category="BossMonsterSettings")
 	float AttackTime = 5.0f;
+	UPROPERTY(EditAnywhere,Category="BossMonsterSettings")
+	float DieTime = 5.0f;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterSettings")
 	float SpawnTime = 0;
@@ -65,6 +71,8 @@ public:
 	TSubclassOf<class ABossMonsterProjectile> PRJClass;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABossSkullProjectile> SkullClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ASpawnedSpell> SpellClass;
 
 //=======~================================================================================================================================
 
@@ -74,11 +82,16 @@ private:
 	void TickThrow();
 	void TickSpawnSkull();
 	void TickDied();
+	void Tickphase2();
+	void TickSpawnMonster();
+	void TickCastSpell();
 	void SetState(EBossMonsterState Next);
 
 public:
 	void SpawnRock();
 	void SpawnSkull();
+	void SpawnSpell();
+
 //=======~================================================================================================================================
 
 private:
@@ -92,4 +105,16 @@ public:
 	
 	UFUNCTION()
 	void OnThrowMontageEnded(UAnimMontage* Montage,bool bInterrupted);
+	
+//=======~================================================================================================================================
+
+public:
+	UPROPERTY(EditAnywhere)
+	TArray <AMonsterBase*> SummonedMonsters;
+	
+	UFUNCTION()
+	bool IsAllDead();
+	
+	
+
 };
