@@ -41,12 +41,12 @@ public:
 	UProjectileMovementComponent* PRJComp;
 
 	UPROPERTY(EditAnywhere,Category="PorjectileSettings")
-	float Speed = 1000;
+	float Speed = 900;
 
 	UPROPERTY()
 	UPlayer_DamageType* NormalDamage;
 private:
-	float Damage = 20;
+	float Damage = 5.0;
 	UFUNCTION()
 	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
