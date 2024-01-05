@@ -29,4 +29,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComp;
 
+
+
+	class APlayer_Archer* Player_Archer;
+
 };
