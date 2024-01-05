@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MonsterBoss.generated.h"
 
+class UPlayer_DamageType;
+class UBossMonsterState;
 class UWidgetComponent;
 class UStatesComponent;
 class USphereComponent;
@@ -36,7 +38,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	UMonsterBossFSM* BossFsm;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
-	UStatesComponent* StateComp;
+	UBossMonsterState* StateComp;
 
 //=======================================================================================================================================
 
@@ -62,5 +64,15 @@ public:
 	UStaticMeshComponent* WeekpointMeshComp;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	UCapsuleComponent* WeekpointCapsuleComp;
-	
+	UPlayer_DamageType* NormalDamage;
+
+	//=======================================================================================================================================
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossSettings")
+	float TakeDamage;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossSettings")
+	float TakeMoreDamage;
+
+	UFUNCTION()
+	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

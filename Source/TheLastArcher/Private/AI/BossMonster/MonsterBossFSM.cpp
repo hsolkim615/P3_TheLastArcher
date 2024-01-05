@@ -56,7 +56,7 @@ void UMonsterBossFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	case EBossMonsterState :: Idle:		    TickIdle();		break;
 	case EBossMonsterState :: Throw:	    TickThrow();		break;
 	case EBossMonsterState :: SpawnSkull:   TickSpawnSkull(); break;
-	case EBossMonsterState :: Phase2:		Tickphase2();	  break;
+	case EBossMonsterState :: Phase2:		TickPhase2();	  break;
 	case EBossMonsterState :: SpawnMonster: TickSpawnMonster(); break;
 	case EBossMonsterState :: CastSpell:    TickCastSpell(); break;
 	case EBossMonsterState :: Died:	        TickDied();		break;
@@ -72,17 +72,17 @@ void UMonsterBossFSM::TickIdle()
 	Target = Cast<APlayer_Archer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if(Target != nullptr && CurrentTime>AttackTime)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("AttackTime!!!!!"));
+		//UE_LOG(LogTemp,Warning,TEXT("AttackTime!!!!!"));
 		//30%확률로 스킬을 사용하도록한다.
 		float RandomValue = FMath::FRand();
 		if(RandomValue <= 0.3f)
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Skill!!!!!"));
+			//UE_LOG(LogTemp,Warning,TEXT("Skill!!!!!"));
 			SetState(EBossMonsterState::SpawnSkull);
 		}
 		else
 		{
-			UE_LOG(LogTemp,Warning,TEXT("JustAttack"));
+			//UE_LOG(LogTemp,Warning,TEXT("JustAttack"));
 			SetState(EBossMonsterState::Throw);
 		}
 	}
@@ -128,7 +128,7 @@ void UMonsterBossFSM::TickDied()
 	
 }
 
-void UMonsterBossFSM::Tickphase2()
+void UMonsterBossFSM::TickPhase2()
 {
 	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 시간이 흐르면 랜덤으로
@@ -164,7 +164,7 @@ void UMonsterBossFSM::TickSpawnMonster()
 void UMonsterBossFSM::TickCastSpell()
 {
 	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Self->PlayAnimMontage(AM_BossAction,1.0f,FName("MonsterSpell"));
+	Self->PlayAnimMontage(AM_BossPhase2,1.0f,FName("MonsterSpell"));
 	// 마법을 캐스팅하는동안 특정 액터를 손에 만들고 그 액터를 부수지못하면 플레이어는 죽게만든다.
 	// 부수게 되면 애니메이션이 작동하여 약점이 노출되게한다. 애니메이션이 끝나면 다음 행동으로 넘어간다.
 }
@@ -177,14 +177,14 @@ void UMonsterBossFSM::SetState(EBossMonsterState Next)
 
 void UMonsterBossFSM::SpawnRock()
 {
-	UE_LOG(LogTemp,Warning,TEXT("SpawnRock!!!!!!!!!!!!!!!!!!!!!!"))
+	//UE_LOG(LogTemp,Warning,TEXT("SpawnRock!!!!!!!!!!!!!!!!!!!!!!"))
 	FTransform ThrowPoint = Self->SpawnStone->GetComponentTransform();
 	GetWorld()->SpawnActor<ABossMonsterProjectile>(PRJClass,ThrowPoint);
 }
 
 void UMonsterBossFSM::SpawnSkull()
 {
-	UE_LOG(LogTemp,Warning,TEXT("Skill888888888888888888888888"))
+	//UE_LOG(LogTemp,Warning,TEXT("Skill888888888888888888888888"))
 
 	SpawnTime = GetWorld()->GetDeltaSeconds();
 
@@ -193,17 +193,17 @@ void UMonsterBossFSM::SpawnSkull()
 	FTransform SpawnPoint3 = Self->SkullSpawn3->GetComponentTransform();
 
 	GetWorld()->SpawnActor<ABossSkullProjectile>(SkullClass,SpawnPoint1);
-	UE_LOG(LogTemp,Warning,TEXT("Spawn11111111111111111111111111111"))
+	//UE_LOG(LogTemp,Warning,TEXT("Spawn11111111111111111111111111111"))
 
 	if(SpawnTime > FixedSpawnTime)
 	{
 		GetWorld()->SpawnActor<ABossSkullProjectile>(SkullClass,SpawnPoint2);
-		UE_LOG(LogTemp,Warning,TEXT("Spawn22222222222222222222222222222222"))
+		//UE_LOG(LogTemp,Warning,TEXT("Spawn22222222222222222222222222222222"))
 	}
 	else
 	{
 		GetWorld()->SpawnActor<ABossSkullProjectile>(SkullClass,SpawnPoint3);
-		UE_LOG(LogTemp,Warning,TEXT("Spawn333333333333333333333333333333"))
+		//UE_LOG(LogTemp,Warning,TEXT("Spawn333333333333333333333333333333"))
 		SpawnTime = 0;
 	}
 	

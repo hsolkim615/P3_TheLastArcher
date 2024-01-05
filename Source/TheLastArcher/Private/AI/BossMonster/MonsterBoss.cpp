@@ -3,7 +3,11 @@
 
 #include "AI/BossMonster/MonsterBoss.h"
 
+#include "Arrow_Base.h"
+#include "Player_Archer.h"
+#include "Player_DamageType.h"
 #include "StatesComponent.h"
+#include "AI/BossMonsterState.h"
 #include "AI/BossMonster/MonsterBossFSM.h"
 #include "Components/SphereComponent.h"
 #include "Components/ArrowComponent.h"
@@ -18,8 +22,11 @@ AMonsterBoss::AMonsterBoss()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
-
+	
+//=======~================================================================================================================================
 	BossFsm = CreateDefaultSubobject<UMonsterBossFSM>("BossFSM");
+
+	StateComp = CreateDefaultSubobject<UBossMonsterState>("StateComp");
 	
 //=======~================================================================================================================================
 	// Mesh를 가져온다.
@@ -60,10 +67,7 @@ AMonsterBoss::AMonsterBoss()
 	SkullSpawn3 -> SetupAttachment(RootComponent);
 
 //=======~================================================================================================================================
-	// 스텟 컴퍼넌트 부착
-	StateComp = CreateDefaultSubobject<UStatesComponent>("StateComp");
 	
-//=======~================================================================================================================================
 
 	HPcomponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPComponent"));
 	HPcomponent->SetupAttachment(RootComponent);
@@ -125,7 +129,8 @@ AMonsterBoss::AMonsterBoss()
 void AMonsterBoss::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	DamagePoint->OnComponentBeginOverlap.AddDynamic(this,&AMonsterBoss::OverlapBegin);
+	WeekpointCapsuleComp->OnComponentBeginOverlap.AddDynamic(this,&AMonsterBoss::OverlapBegin);
 }
 
 
@@ -137,6 +142,8 @@ void AMonsterBoss::Tick(float DeltaTime)
 	FVector Target = UGameplayStatics::GetPlayerCameraManager(GetWorld(),0)->GetCameraLocation();;
 	FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(Start,Target);
 	HPcomponent->SetWorldRotation(NewRotation);
+
+	
 }
 
 
@@ -144,5 +151,26 @@ void AMonsterBoss::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AMonsterBoss::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// 부딪힌 대상이 화살인지 체크
+	 auto Arrow = Cast<AArrow_Base>(OtherActor);
+	if(Arrow != nullptr)
+	{
+		// 부딪힌 대상이 얼굴이라면.
+		if(OverlappedComponent == DamagePoint)
+		{
+			
+			this->StateComp->TakeDamage(this,TakeDamage,NormalDamage,nullptr,OtherActor);	
+		}
+		else if(OverlappedComponent == WeekpointCapsuleComp)
+		{
+			this->StateComp->TakeDamage(this,TakeMoreDamage,NormalDamage,nullptr,OtherActor);
+		}
+		
+	}
 }
 

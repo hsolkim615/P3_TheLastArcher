@@ -82,12 +82,14 @@ private:
 	void TickThrow();
 	void TickSpawnSkull();
 	void TickDied();
-	void Tickphase2();
+	
 	void TickSpawnMonster();
 	void TickCastSpell();
-	void SetState(EBossMonsterState Next);
+	
 
 public:
+	void SetState(EBossMonsterState Next);
+	void TickPhase2();
 	void SpawnRock();
 	void SpawnSkull();
 	void SpawnSpell();
@@ -102,6 +104,9 @@ public:
 	//newcode
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category ="Boss")
 	UAnimMontage* AM_BossAction;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category ="Boss")
+	UAnimMontage* AM_BossPhase2;
 	
 	UFUNCTION()
 	void OnThrowMontageEnded(UAnimMontage* Montage,bool bInterrupted);
