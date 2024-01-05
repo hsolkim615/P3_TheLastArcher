@@ -3,7 +3,6 @@
 
 #include "Item/IT_HealPotion.h"
 #include "Player_Archer.h"
-#include <../../../../../../../Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h>
 #include "StatesComponent.h"
 
 AIT_HealPotion::AIT_HealPotion()
@@ -20,11 +19,6 @@ AIT_HealPotion::AIT_HealPotion()
 
 }
 
-void AIT_HealPotion::BeginPlay()
-{
-	Player_Archer = Cast<APlayer_Archer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-}
 
 void AIT_HealPotion::NotifyActorBeginOverlap(AActor* OtherActor)
 {

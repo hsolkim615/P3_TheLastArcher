@@ -18,11 +18,9 @@ public:
 
 	AIT_HealPotion();
 
-	virtual void BeginPlay() override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-	class APlayer_Archer* Player_Archer;
 
 
 };
