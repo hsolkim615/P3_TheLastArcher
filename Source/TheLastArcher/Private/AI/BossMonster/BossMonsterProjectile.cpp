@@ -4,6 +4,7 @@
 #include "AI/BossMonster/BossMonsterProjectile.h"
 
 #include "Player_Archer.h"
+#include "StatesComponent.h"
 #include "AI/BossMonster/MonsterBoss.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -36,6 +37,8 @@ ABossMonsterProjectile::ABossMonsterProjectile()
 void ABossMonsterProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	SphereComp->SetCollisionObjectType(ECC_GameTraceChannel7);
+	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Target = Cast<APlayer_Archer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	auto Temp = UGameplayStatics::GetActorOfClass(GetWorld(), 
 			AMonsterBoss::StaticClass());
@@ -65,6 +68,13 @@ void ABossMonsterProjectile::Tick(float DeltaTime)
 void ABossMonsterProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	if(OtherActor -> IsA<APlayer_Archer>())
+	{
+		UE_LOG(LogTemp,Warning,TEXT("fdfasfdasfdasfasfddaf"));
+		// 부딪힌 대상이 플레이어라면 스텟 컴퍼넌트로 들어가서 대미지를 준다.
+		auto Player = Cast<APlayer_Archer>(OtherActor);
+		Player->StatesComp->TakeDamage(Player,Damage,NormalDamage,nullptr,this);
+		Destroy();
+	}
 }
 

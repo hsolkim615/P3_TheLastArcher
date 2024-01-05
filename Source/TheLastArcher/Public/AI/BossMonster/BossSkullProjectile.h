@@ -46,7 +46,7 @@ public:
 	AMonsterBoss* Self;
 
 	UPROPERTY(EditAnywhere,Category="BossSettings")
-	float Speed = 1500;
+	float Speed = 500;
 
 	UPROPERTY(EditAnywhere,Category="BossSettings")
 	float Damage = 20;

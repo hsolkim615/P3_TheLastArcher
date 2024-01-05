@@ -68,10 +68,10 @@ public:
 
 	//=======================================================================================================================================
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossSettings")
-	float TakeDamage;
+	float TakeDamage = 50;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossSettings")
-	float TakeMoreDamage;
+	float TakeMoreDamage = 100;
 
 	UFUNCTION()
 	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

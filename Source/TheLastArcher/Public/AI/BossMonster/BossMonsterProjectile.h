@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Player_DamageType.h"
 #include "GameFramework/Actor.h"
 #include "BossMonsterProjectile.generated.h"
 
@@ -40,8 +41,10 @@ public:
 	UProjectileMovementComponent* PRJComp;
 
 	UPROPERTY(EditAnywhere,Category="PorjectileSettings")
-	float Speed;
+	float Speed = 1000;
 
+	UPROPERTY()
+	UPlayer_DamageType* NormalDamage;
 private:
 	float Damage = 20;
 	UFUNCTION()
