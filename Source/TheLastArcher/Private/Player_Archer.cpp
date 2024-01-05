@@ -345,7 +345,7 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 		BowStringPlace->SetRelativeLocation(FVector(RightController->GetRelativeLocation().X - 30.f, BowStringPlace->GetRelativeLocation().Y, BowStringPlace->GetRelativeLocation().Z));
 
 	}
-	/* 원본 ********************************************
+	//원본 ********************************************
 	// 화살이 날아갈 방향을 보여주는 가이드 라인
 		// 장전된 화살이 있는 경우
 	if (LoadArrow) {
@@ -356,7 +356,7 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 		// ����ȣ�� ���
 		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, -1, 0, 2.0f);
 	}
-	*/
+	
 
 
 
@@ -407,6 +407,8 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 	//==========================
 
+
+	/*
 	// 화살이 날아갈 수 있는 거리 ======================
 	//float ArrowLength = 5000.0f; 
 
@@ -421,15 +423,15 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 
 	float ArrowLength = 0.0f;
 
-	if (CurrentPitch >= MinPitch && CurrentPitch <= MaxPitch) {
+	if (CurrentPitch >= MinPitch && CurrentPitch <= MaxPitch) { // 90도 보다 크고, 135도 보다 작을 때 - 사정거리는 각도에 비례하여 달라짐
 		// Pitch 값이 MinPitch와 MaxPitch 사이에 있을 때 ArrowLength를 조절
 		ArrowLength = FMath::Lerp(MinArrowLength, MaxArrowLength, (CurrentPitch - MinPitch) / (MaxPitch - MinPitch));
 	}
-	else if (CurrentPitch > MaxPitch) {
+	else if (CurrentPitch > MaxPitch) { // 135도 보다 클 때 - 각도에 비례하여 작아짐
 		// Pitch 값이 MaxPitch보다 클 때 ArrowLength를 조절
 		ArrowLength = FMath::Clamp(MaxArrowLength - (CurrentPitch - MaxPitch), MinArrowLength, MaxArrowLength);
 	}
-	else {
+	else { // 90도 보다 작을 때 - 최소 사정거리 유지
 		// Pitch 값이 MinPitch보다 작을 때 ArrowLength를 유지
 		ArrowLength = MinArrowLength;
 	}
@@ -499,7 +501,7 @@ void APlayer_Archer::RightTrigger_Attack_Ready(const FInputActionValue& value)
 	// 베지어 곡선 =========================================
 
 
-
+	*/
 
 }
 
