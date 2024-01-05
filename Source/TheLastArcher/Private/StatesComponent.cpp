@@ -31,18 +31,7 @@ void UStatesComponent::BeginPlay()
 	// 컴포넌트이기때문에 사용자를 부여하기 위하여 Owner를 만들어준다.
 	AActor* Owner = GetOwner();
 	// 만약 제대로 들어갔다면
-
-	if(Owner == Boss)
-	{
-		auto BossMonster = Cast<AMonsterBoss>(Owner);
-		if(BossMonster)
-		{
-			MaxHealth = 1500.f;
-			CurrentHealth = MaxHealth;
-		}
-	}
 	
-
 	if(Owner)
 	{
 		// 데미지 받는 함수를 바인딩하자.(델리게이트)

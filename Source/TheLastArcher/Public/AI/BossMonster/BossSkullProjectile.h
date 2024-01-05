@@ -53,6 +53,10 @@ public:
 
 	UPROPERTY(EditAnywhere,Category="BossSettings")
 	UPlayer_DamageType* NormalDamage;
+
+	bool IsHit = false;
+
+	bool CheckHit();
 	
 	UPROPERTY()
 	FTimerHandle TimerHandle_FindTarget;
