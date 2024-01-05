@@ -13,5 +13,16 @@ UCLASS()
 class THELASTARCHER_API AIT_HealPotion : public AItem_Base
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	AIT_HealPotion();
+
+	virtual void BeginPlay() override;
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	class APlayer_Archer* Player_Archer;
+
+
 };
