@@ -39,6 +39,7 @@ void ABossSkullProjectile::BeginPlay()
 	// 타이머를 사용하여 0.1초마다 Target을 찾도록하였다.
 	GetWorldTimerManager().SetTimer(TimerHandle_FindTarget, this, &ABossSkullProjectile::FindTarget, 0.1f, true);
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this,&ABossSkullProjectile::OverlapBegin);
+	
 }
 
 
@@ -56,10 +57,18 @@ void ABossSkullProjectile::Tick(float DeltaTime)
 		SetActorLocation(NewLocation);
 	}
 	
-
+	if(CheckHit() == true)
+	{
+		this->Destroy();
+	}
 
 }
 
+
+bool ABossSkullProjectile::CheckHit()
+{
+	return IsHit;
+}
 
 void ABossSkullProjectile::FindTarget()
 {
@@ -77,6 +86,7 @@ void ABossSkullProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent
 		// 부딪힌 대상이 플레이어라면 스텟 컴퍼넌트로 들어가서 대미지를 준다.
 		auto Player = Cast<APlayer_Archer>(OtherActor);
 		Player->StatesComp->TakeDamage(Player,Damage,NormalDamage,nullptr,this);
+		IsHit = true;
 		
 	}
 }
