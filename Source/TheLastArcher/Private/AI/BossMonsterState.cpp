@@ -53,7 +53,8 @@ void UBossMonsterState::TakeDamage(AActor* DamagedActor, float Damage, const UDa
 		{
 			BossMon->BossFsm->SetState(EBossMonsterState::Idle);
 		}
-		else BossMon->BossFsm->SetState(EBossMonsterState::Phase2);
+		else if(CurrentHealth > 0 && CurrentHealth < Phase2) BossMon->BossFsm->SetState(EBossMonsterState::Phase2);
+		else BossMon->BossFsm->SetState(EBossMonsterState::Died);
 	}
 }
 
