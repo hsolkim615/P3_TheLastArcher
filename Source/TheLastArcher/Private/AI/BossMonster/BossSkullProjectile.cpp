@@ -3,6 +3,7 @@
 
 #include "AI/BossMonster/BossSkullProjectile.h"
 
+#include "Arrow_Base.h"
 #include "Player_Archer.h"
 #include "Player_DamageType.h"
 #include "StatesComponent.h"
@@ -83,6 +84,10 @@ void ABossSkullProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent
 		// 부딪힌 대상이 플레이어라면 스텟 컴퍼넌트로 들어가서 대미지를 준다.
 		auto Player = Cast<APlayer_Archer>(OtherActor);
 		Player->StatesComp->TakeDamage(Player,Damage,NormalDamage,nullptr,this);
+		Destroy();
+	}
+	else if(OtherActor -> IsA<AArrow_Base>())
+	{
 		Destroy();
 	}
 }
