@@ -7,6 +7,8 @@
 #include "BossMonsterState.generated.h"
 
 
+class AMonsterBoss;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THELASTARCHER_API UBossMonsterState : public UActorComponent
 {
@@ -24,6 +26,7 @@ public:
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 public:	
+	
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float MaxHealth;

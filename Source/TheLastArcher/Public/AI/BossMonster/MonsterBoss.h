@@ -64,6 +64,7 @@ public:
 	UStaticMeshComponent* WeekpointMeshComp;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BossSettings")
 	UCapsuleComponent* WeekpointCapsuleComp;
+	UPROPERTY(EditAnywhere)
 	UPlayer_DamageType* NormalDamage;
 
 	//=======================================================================================================================================

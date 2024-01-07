@@ -11,7 +11,7 @@
 UBossMonsterState::UBossMonsterState()
 {
 	
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	MaxHealth = 1500;
 	CurrentHealth = MaxHealth;
@@ -24,6 +24,11 @@ void UBossMonsterState::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AActor* Owner = GetOwner();
+	if(Owner)
+	{
+		Owner->OnTakeAnyDamage.AddDynamic(this,&UBossMonsterState::TakeDamage);
+	}
 	
 	
 }
@@ -53,7 +58,10 @@ void UBossMonsterState::TakeDamage(AActor* DamagedActor, float Damage, const UDa
 		{
 			BossMon->BossFsm->SetState(EBossMonsterState::Idle);
 		}
-		else if(CurrentHealth > 0 && CurrentHealth < Phase2) BossMon->BossFsm->SetState(EBossMonsterState::Phase2);
+		else if(CurrentHealth > 0 && CurrentHealth < Phase2)
+		{
+			BossMon->BossFsm->SetState(EBossMonsterState::Phase2);
+		}
 		else BossMon->BossFsm->SetState(EBossMonsterState::Died);
 	}
 }

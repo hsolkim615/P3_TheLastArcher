@@ -113,6 +113,7 @@ AMonsterBoss::AMonsterBoss()
 	WeekpointCapsuleComp -> SetRelativeScale3D(FVector(1.0f));
 	WeekpointCapsuleComp->SetCapsuleHalfHeight(17.8f);
 	WeekpointCapsuleComp->SetCapsuleRadius(8.2f);
+	
 
 //=======~================================================================================================================================
 
@@ -156,22 +157,12 @@ void AMonsterBoss::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void AMonsterBoss::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// 부딪힌 대상이 화살인지 체크
-	 auto Arrow = Cast<AArrow_Base>(OtherActor);
-	if(Arrow != nullptr)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("dkfjdaslfjklasffdfasfs"));
-		// 부딪힌 대상이 얼굴이라면.
-		if(OverlappedComponent == DamagePoint)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("dkfjdaslfjklasf"));
-			this->StateComp->TakeDamage(this,TakeDamage,NormalDamage,nullptr,OtherActor);	
-		}
-		else if(OverlappedComponent == WeekpointCapsuleComp)
-		{
-			this->StateComp->TakeDamage(this,TakeMoreDamage,NormalDamage,nullptr,OtherActor);
-		}
+	UE_LOG(LogTemp,Warning,TEXT("BossHit!!!!!!!!!!!!!!!!!!!"));
+
+	
+	this->StateComp->TakeDamage(this,TakeDamage,NormalDamage,nullptr,nullptr);
+	UE_LOG(LogTemp,Warning,TEXT("BossHit22222222222222222222222"));
+
 		
-	}
 }
 
