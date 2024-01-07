@@ -23,6 +23,8 @@ public:
 	TObjectPtr<UAnimMontage> Throw;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterAnim")
 	TObjectPtr<UAnimMontage> Spawn;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BossMonsterAnim")
+	TObjectPtr<UAnimMontage> Spell;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayMontageThrow(FName Section);

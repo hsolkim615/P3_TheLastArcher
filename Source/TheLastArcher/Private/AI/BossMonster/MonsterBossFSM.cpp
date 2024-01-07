@@ -120,9 +120,10 @@ void UMonsterBossFSM::TickDied()
 {
 	// 죽으면 애니메이션 발동 후 사망.
 	CurrentTime += GetWorld()->GetDeltaSeconds();
+	Self->PlayAnimMontage(AM_BossAction,1.0f,FName("Dead"));
 	if(CurrentTime > DieTime)
 	{
-		Self->PlayAnimMontage(AM_BossAction,1.0f,FName("Died"));
+		
 		Self->Destroy();	
 	}
 	
@@ -130,6 +131,7 @@ void UMonsterBossFSM::TickDied()
 
 void UMonsterBossFSM::TickPhase2()
 {
+	//UE_LOG(LogTemp,Warning,TEXT("StartPhase2!!!!!!!!!!!!!!!!"));
 	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 시간이 흐르면 랜덤으로
 	CurrentTime += GetWorld()->GetDeltaSeconds();
@@ -138,11 +140,15 @@ void UMonsterBossFSM::TickPhase2()
 		float RandomValue = FMath::FRand();
 		if(RandomValue<0.2f)
 		{
+			UE_LOG(LogTemp,Warning,TEXT("MoveSapwnMonster!!!!!!!!!!!!!!!!"));
+
 			SetState(EBossMonsterState::SpawnMonster);
 			
 		}
 		else
 		{
+			
+
 			SetState(EBossMonsterState::CastSpell);
 		}
 	}
@@ -163,8 +169,15 @@ void UMonsterBossFSM::TickSpawnMonster()
 
 void UMonsterBossFSM::TickCastSpell()
 {
+	
 	Self->DamagePoint->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Self->PlayAnimMontage(AM_BossPhase2,1.0f,FName("MonsterSpell"));
+	//UE_LOG(LogTemp,Warning,TEXT("CastPell!!!!!!!!!!!!!!!!"));
+	if (BossMonsterAnim->Montage_IsPlaying(BossMonsterAnim->Throw) == false)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Spell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"))
+		Self->PlayAnimMontage(AM_BossAction,0.2f,FName("CastSpell"));
+	}
+	
 	// 마법을 캐스팅하는동안 특정 액터를 손에 만들고 그 액터를 부수지못하면 플레이어는 죽게만든다.
 	// 부수게 되면 애니메이션이 작동하여 약점이 노출되게한다. 애니메이션이 끝나면 다음 행동으로 넘어간다.
 }
@@ -212,6 +225,7 @@ void UMonsterBossFSM::SpawnSkull()
 
 void UMonsterBossFSM::SpawnSpell()
 {
+	// UE_LOG(LogTemp,Warning,TEXT("!!!!!!!!!!!!!!!!!!!!!!!!"));
 	FTransform SpawnSpellLoc = Self->SpawnSpellpoint->GetComponentTransform();
 	GetWorld()->SpawnActor<ASpawnedSpell>(SpellClass,SpawnSpellLoc);
 }

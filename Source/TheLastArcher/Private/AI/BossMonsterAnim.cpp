@@ -27,6 +27,8 @@ void UBossMonsterAnim::AnimNotify_Spawn()
 
 void UBossMonsterAnim::AnimNotify_Spell()
 {
+	UE_LOG(LogTemp,Warning,TEXT("PlayMontage!!!!!!!!!!!!!!!!!!!!!!!!"));
+
 	auto Boss = Cast<AMonsterBoss>(TryGetPawnOwner());
 	if(Boss != nullptr)
 	{

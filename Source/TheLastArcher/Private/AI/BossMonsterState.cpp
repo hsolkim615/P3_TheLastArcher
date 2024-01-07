@@ -50,19 +50,28 @@ void UBossMonsterState::UpdateHP(float UpdatedHealth)
 void UBossMonsterState::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
+	// 데미지가 달면서
 	UpdateHP(-Damage);
 	AMonsterBoss* BossMon = Cast<AMonsterBoss>(DamagedActor);
 	if(BossMon != nullptr)
 	{
+		// 현재 체력이 2페이지 기준치보다 높으면 Idle 상태로 전이.
 		if(CurrentHealth>Phase2)
 		{
 			BossMon->BossFsm->SetState(EBossMonsterState::Idle);
 		}
-		else if(CurrentHealth > 0 && CurrentHealth < Phase2)
+		// 현재 체력이 2페이지 기준치보다 밑으로 떨어지면 Phase2상태로 돌입.
+		else
 		{
+			if(CurrentHealth<Phase2 && CurrentHealth>0)
 			BossMon->BossFsm->SetState(EBossMonsterState::Phase2);
+			// 현제 체력이 0 이하일 때 죽음 형태돌 돌입.
+			else
+			{
+				//BossMon->BossFsm->SetState(EBossMonsterState::Died);
+			}
 		}
-		else BossMon->BossFsm->SetState(EBossMonsterState::Died);
+		
 	}
 }
 
